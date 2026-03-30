@@ -13,5 +13,9 @@ const config: StorybookConfig = {
     name: '@storybook/react-vite',
     options: {},
   },
+  viteFinal: (config) => {
+    config.base = '/eva-ui/';
+    return config;
+  },
 };
 export default config;
