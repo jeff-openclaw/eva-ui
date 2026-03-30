@@ -1,0 +1,81 @@
+@layer eva-ui {
+  .eva-countdown {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--eva-space-2);
+    font-family: var(--eva-font-mono);
+    text-align: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ── Labels ── */
+  .eva-countdown__label {
+    font-family: var(--eva-font-ja);
+    font-size: var(--eva-text-sm);
+    color: var(--eva-text-dim);
+    letter-spacing: var(--eva-tracking-wide);
+  }
+
+  .eva-countdown__label-sub {
+    font-size: var(--eva-text-xs);
+    color: var(--eva-text-dim);
+    letter-spacing: var(--eva-tracking-wider);
+    margin-bottom: var(--eva-space-1);
+  }
+
+  /* ── Time display ── */
+  .eva-countdown__time {
+    font-size: var(--eva-text-xl);
+    font-weight: var(--eva-weight-bold);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: var(--eva-tracking-wide);
+    line-height: 1;
+  }
+
+  /* ── States ── */
+  .eva-countdown--normal .eva-countdown__time {
+    color: var(--eva-text-gold);
+  }
+
+  .eva-countdown--warning .eva-countdown__time {
+    color: var(--eva-warning);
+  }
+
+  .eva-countdown--warning {
+    --pulse-low: rgba(255, 34, 0, 0.05);
+    --pulse-high: rgba(255, 34, 0, 0.15);
+    --pulse-color: var(--eva-warning);
+    animation: warning-pulse 2s ease-in-out infinite;
+  }
+
+  .eva-countdown--critical .eva-countdown__time {
+    color: var(--eva-text);
+    animation: berserk-text 0.5s steps(2, end) infinite;
+  }
+
+  .eva-countdown--critical {
+    --pulse-low: rgba(204, 17, 17, 0.05);
+    --pulse-high: rgba(204, 17, 17, 0.2);
+    --pulse-color: var(--eva-crimson);
+    animation: warning-pulse 0.8s ease-in-out infinite;
+  }
+
+  .eva-countdown--expired .eva-countdown__time {
+    color: var(--eva-text-dim);
+  }
+
+  .eva-countdown--expired {
+    background: rgba(204, 17, 17, 0.15);
+  }
+
+  .eva-countdown__expired-label {
+    font-family: var(--eva-font-ja);
+    font-size: var(--eva-text-xs);
+    color: var(--eva-crimson);
+    margin-top: var(--eva-space-1);
+    letter-spacing: var(--eva-tracking-wide);
+  }
+}

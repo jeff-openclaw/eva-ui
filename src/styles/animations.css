@@ -1,0 +1,131 @@
+@layer eva-ui {
+  /* ── HUD Chrome Arrival Animations ── */
+
+  @keyframes hud-arrive-left {
+    from {
+      transform: perspective(var(--eva-perspective, 1200px)) translateX(-40px) translateZ(0px) rotateY(8deg);
+      opacity: 0;
+    }
+    to {
+      transform: perspective(var(--eva-perspective, 1200px)) translateX(0) translateZ(24px) rotateY(0deg);
+      opacity: 1;
+    }
+  }
+
+  @keyframes hud-arrive-right {
+    from {
+      transform: perspective(var(--eva-perspective, 1200px)) translateX(40px) translateZ(0px) rotateY(-8deg);
+      opacity: 0;
+    }
+    to {
+      transform: perspective(var(--eva-perspective, 1200px)) translateX(0) translateZ(24px) rotateY(0deg);
+      opacity: 1;
+    }
+  }
+
+  @keyframes hud-arrive-top {
+    from {
+      transform: perspective(var(--eva-perspective, 1200px)) translateY(-30px) translateZ(0px) rotateX(6deg);
+      opacity: 0;
+    }
+    to {
+      transform: perspective(var(--eva-perspective, 1200px)) translateY(0) translateZ(24px) rotateX(0deg);
+      opacity: 1;
+    }
+  }
+
+  @keyframes hud-arrive-bottom {
+    from {
+      transform: perspective(var(--eva-perspective, 1200px)) translateY(30px) translateZ(0px) rotateX(-6deg);
+      opacity: 0;
+    }
+    to {
+      transform: perspective(var(--eva-perspective, 1200px)) translateY(0) translateZ(24px) rotateX(0deg);
+      opacity: 1;
+    }
+  }
+
+  @keyframes hud-arrive-center {
+    from {
+      transform: perspective(var(--eva-perspective, 1200px)) translateZ(0px) scale(0.95);
+      opacity: 0;
+    }
+    to {
+      transform: perspective(var(--eva-perspective, 1200px)) translateZ(48px) scale(1);
+      opacity: 1;
+    }
+  }
+
+  /* ── Warning Pulse ── */
+
+  @keyframes warning-pulse {
+    0%, 100% {
+      background-color: var(--pulse-low);
+      box-shadow: 0 0 0 0 var(--pulse-color);
+    }
+    50% {
+      background-color: var(--pulse-high);
+      box-shadow: 0 0 12px 2px var(--pulse-color);
+    }
+  }
+
+  /* ── Berserk State ── */
+
+  @keyframes berserk-pulse {
+    0%, 100% {
+      border-color: var(--eva-crimson);
+      box-shadow: 0 0 0 1px var(--eva-crimson), 0 0 20px rgba(255, 34, 0, 0.3);
+    }
+    50% {
+      border-color: var(--eva-warning);
+      box-shadow: 0 0 0 2px var(--eva-warning), 0 0 40px rgba(255, 34, 0, 0.6);
+    }
+  }
+
+  @keyframes berserk-text {
+    0% { color: var(--eva-warning); }
+    50% { color: var(--eva-crimson); }
+  }
+
+  /* ── Scanline Drift ── */
+
+  @keyframes scanline-drift {
+    from { background-position: 0 0; }
+    to { background-position: 0 calc(var(--eva-scanline-height, 2px) * 2); }
+  }
+
+  @keyframes scanline-flicker {
+    0%, 95%, 100% { opacity: 1; }
+    96% { opacity: 0.92; }
+    97% { opacity: 1; }
+    98% { opacity: 0.96; }
+  }
+
+  /* ── Hazard Stripe Scroll ── */
+
+  @keyframes stripe-scroll {
+    from { background-position: 0 0; }
+    to { background-position: calc(var(--eva-hazard-width, 4px) * 2 * 1.414) 0; }
+  }
+
+  /* ── MAGI Vote Flash ── */
+
+  @keyframes vote-flash {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+  }
+
+  /* ── Reduced Motion ── */
+
+  @media (prefers-reduced-motion: reduce) {
+    .eva-hud-chrome[data-animate],
+    .eva-warning-hex,
+    .eva-hud-chrome--berserk,
+    .eva-scanline-overlay--animated,
+    .eva-scanline-overlay--flicker,
+    .eva-hazard-stripes--animated {
+      animation: none !important;
+    }
+  }
+}

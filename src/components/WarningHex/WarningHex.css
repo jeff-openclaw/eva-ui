@@ -1,0 +1,68 @@
+@layer eva-ui {
+  .eva-warning-hex {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: warning-pulse var(--pulse-interval, 1200ms) ease-in-out infinite;
+  }
+
+  /* ── Caution ── */
+  .eva-warning-hex--caution {
+    --pulse-low: rgba(204, 136, 0, 0.10);
+    --pulse-high: rgba(204, 136, 0, 0.25);
+    --pulse-color: var(--eva-gold);
+    border-color: var(--eva-gold);
+  }
+  .eva-warning-hex--caution .eva-warning-hex__label { color: var(--eva-text-gold); }
+
+  /* ── Warning ── */
+  .eva-warning-hex--warning {
+    --pulse-low: rgba(255, 34, 0, 0.10);
+    --pulse-high: rgba(255, 34, 0, 0.30);
+    --pulse-color: var(--eva-warning);
+    border-color: var(--eva-warning);
+  }
+  .eva-warning-hex--warning .eva-warning-hex__label { color: var(--eva-warning); }
+
+  /* ── Critical ── */
+  .eva-warning-hex--critical {
+    --pulse-low: rgba(204, 17, 17, 0.15);
+    --pulse-high: rgba(204, 17, 17, 0.40);
+    --pulse-color: var(--eva-crimson);
+    border-color: var(--eva-crimson);
+  }
+  .eva-warning-hex--critical .eva-warning-hex__label { color: var(--eva-text); }
+
+  /* ── Berserk ── */
+  .eva-warning-hex--berserk {
+    --pulse-low: rgba(204, 17, 17, 0.20);
+    --pulse-high: rgba(204, 17, 17, 0.50);
+    --pulse-color: var(--eva-crimson);
+    border-color: var(--eva-crimson);
+  }
+  .eva-warning-hex--berserk .eva-warning-hex__label {
+    animation: berserk-text 0.4s steps(2, end) infinite;
+  }
+
+  /* ── Content ── */
+  .eva-warning-hex__content {
+    text-align: center;
+    font-family: var(--eva-font-mono);
+  }
+
+  .eva-warning-hex__label {
+    font-size: var(--eva-text-xs);
+    font-weight: var(--eva-weight-bold);
+    letter-spacing: var(--eva-tracking-wider);
+    text-transform: uppercase;
+  }
+
+  .eva-warning-hex__label-ja {
+    font-family: var(--eva-font-ja);
+    font-size: 0.5rem;
+    color: var(--eva-text-dim);
+    margin-top: 2px;
+  }
+}

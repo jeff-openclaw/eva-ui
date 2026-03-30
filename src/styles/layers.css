@@ -1,1 +1,13 @@
 @layer eva-ui;
+
+/* Z-index layer map — referenced as CSS custom properties */
+@layer eva-ui {
+  :root {
+    --eva-layer-grid-bg: 0;
+    --eva-layer-grid-content: 10;
+    --eva-layer-chrome: 20;
+    --eva-layer-floating: 30;
+    --eva-layer-modal: 40;
+    --eva-layer-tooltip: 50;
+  }
+}

@@ -1,0 +1,66 @@
+@layer eva-ui {
+  .eva-hud-modal__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 39;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: hud-arrive-center 200ms ease-out both;
+  }
+
+  .eva-hud-modal {
+    position: relative;
+    z-index: 40;
+    width: 90%;
+    animation: hud-arrive-center 200ms ease-out both;
+    border: 1px solid var(--eva-gold);
+    box-shadow:
+      0 0 0 3px var(--eva-void),
+      0 0 0 4px var(--eva-gold),
+      0 24px 64px rgba(0, 0, 0, 0.95);
+    overflow: hidden;
+  }
+
+  .eva-hud-modal:focus {
+    outline: none;
+  }
+
+  .eva-hud-modal__header {
+    padding: var(--eva-space-3) var(--eva-space-4);
+    background: var(--eva-deep);
+    border-bottom: 1px solid var(--eva-gold);
+  }
+
+  .eva-hud-modal__title {
+    font-family: var(--eva-font-ui);
+    font-size: var(--eva-text-lg);
+    color: var(--eva-text-gold);
+    text-transform: uppercase;
+    letter-spacing: var(--eva-tracking-wide);
+  }
+
+  .eva-hud-modal__title-ja {
+    font-family: var(--eva-font-ja);
+    font-size: var(--eva-text-sm);
+    color: var(--eva-text-dim);
+    margin-top: 2px;
+  }
+
+  .eva-hud-modal__body {
+    padding: var(--eva-space-4);
+    color: var(--eva-text);
+    font-family: var(--eva-font-mono);
+    font-size: var(--eva-text-base);
+    line-height: var(--eva-leading-normal);
+  }
+
+  .eva-hud-modal__footer {
+    padding: var(--eva-space-3) var(--eva-space-4);
+    border-top: 1px solid var(--eva-border);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--eva-space-2);
+  }
+}

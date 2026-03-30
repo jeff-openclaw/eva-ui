@@ -1,0 +1,18 @@
+@layer eva-ui {
+  .eva-hazard-stripes {
+    background: repeating-linear-gradient(
+      var(--stripe-angle, 45deg),
+      var(--stripe-color, var(--eva-crimson)) 0px,
+      var(--stripe-color, var(--eva-crimson)) var(--stripe-width, 4px),
+      var(--stripe-bg, var(--eva-void)) var(--stripe-width, 4px),
+      var(--stripe-bg, var(--eva-void)) calc(var(--stripe-width, 4px) * 2)
+    );
+    height: var(--stripe-height, 4px);
+    width: 100%;
+  }
+
+  .eva-hazard-stripes--animated {
+    background-size: var(--stripe-size, 11.31px) 100%;
+    animation: stripe-scroll var(--stripe-duration, 0.56s) linear infinite;
+  }
+}
