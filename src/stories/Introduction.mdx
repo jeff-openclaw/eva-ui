@@ -1,0 +1,44 @@
+# Eva-UI
+
+A React component library faithful to the **NERV/MAGI** computer system aesthetic from *Neon Genesis Evangelion*.
+
+## Design Language
+
+- **Hexagonal grid** as the core layout primitive
+- **Pointy-top** hex orientation (the Eva standard)
+- **Crimson + Gold** on deep void backgrounds
+- **CRT scanlines** and **hazard stripes** for atmosphere
+- **HUD depth layers** — chrome floats on a separate plane from the grid
+
+## Theme Variants
+
+- **NERV** (default) — crimson/red tactical display
+- **SEELE** — cooler blue tones
+- **WILLE** — resistance green
+
+## Getting Started
+
+```tsx
+import { HexGrid, EvaThemeProvider } from 'eva-ui';
+import 'eva-ui/styles.css';
+
+function App() {
+  return (
+    <EvaThemeProvider>
+      <HexGrid cellSize={44} gap={4} cols={8} rows={6} />
+    </EvaThemeProvider>
+  );
+}
+```
+
+## Color Tokens
+
+All colors are CSS Custom Properties prefixed with `--eva-`:
+
+| Token | Value | Use |
+|-------|-------|-----|
+| `--eva-void` | `#080808` | Background |
+| `--eva-crimson` | `#cc1111` | Primary accent |
+| `--eva-gold` | `#cc8800` | Secondary accent |
+| `--eva-text` | `#ff3333` | Primary text |
+| `--eva-border` | `#330808` | Subtle borders |

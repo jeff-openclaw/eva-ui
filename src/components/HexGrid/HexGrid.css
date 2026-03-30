@@ -1,0 +1,44 @@
+@layer eva-ui {
+  .eva-hex-grid {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--eva-void);
+  }
+
+  .eva-hex-grid__svg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .eva-hex-grid__svg polygon {
+    pointer-events: fill;
+    transition: fill 150ms ease;
+  }
+
+  .eva-hex-grid__content {
+    position: absolute;
+    inset: 0;
+  }
+
+  .eva-hex-grid__cell {
+    position: absolute;
+    overflow: hidden;
+  }
+
+  .eva-hex-grid__scanlines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.15) 2px,
+      rgba(0, 0, 0, 0.15) 4px
+    );
+    z-index: 1;
+  }
+}

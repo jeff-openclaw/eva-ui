@@ -1,0 +1,20 @@
+@layer eva-ui {
+  .eva-scanlines {
+    position: relative;
+  }
+
+  .eva-scanlines::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent var(--eva-scanline-height, 2px),
+      rgba(0, 0, 0, var(--eva-scanline-opacity, 0.15)) var(--eva-scanline-height, 2px),
+      rgba(0, 0, 0, var(--eva-scanline-opacity, 0.15)) calc(var(--eva-scanline-height, 2px) * 2)
+    );
+    z-index: 1;
+  }
+}

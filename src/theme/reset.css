@@ -1,0 +1,23 @@
+@layer eva-ui {
+  .eva-theme {
+    color: var(--eva-text);
+    background: var(--eva-void);
+    font-family: var(--eva-font-ui);
+    font-size: var(--eva-text-base);
+    line-height: var(--eva-leading-normal);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .eva-theme *,
+  .eva-theme *::before,
+  .eva-theme *::after {
+    box-sizing: border-box;
+  }
+
+  .eva-theme code,
+  .eva-theme pre,
+  .eva-theme kbd {
+    font-family: var(--eva-font-mono);
+  }
+}

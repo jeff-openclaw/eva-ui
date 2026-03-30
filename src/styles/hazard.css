@@ -1,0 +1,11 @@
+@layer eva-ui {
+  .eva-hazard {
+    background: repeating-linear-gradient(
+      var(--eva-hazard-angle, 45deg),
+      var(--eva-crimson) 0,
+      var(--eva-crimson) var(--eva-hazard-width, 4px),
+      var(--eva-void) var(--eva-hazard-width, 4px),
+      var(--eva-void) calc(var(--eva-hazard-width, 4px) * 2)
+    );
+  }
+}
