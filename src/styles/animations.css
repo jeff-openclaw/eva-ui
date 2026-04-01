@@ -124,7 +124,8 @@
     .eva-hud-chrome--berserk,
     .eva-scanline-overlay--animated,
     .eva-scanline-overlay--flicker,
-    .eva-hazard-stripes--animated {
+    .eva-hazard-stripes--animated,
+    .eva-magi-panel--pulse {
       animation: none !important;
     }
   }

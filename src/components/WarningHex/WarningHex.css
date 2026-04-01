@@ -65,4 +65,12 @@
     color: var(--eva-text-dim);
     margin-top: 2px;
   }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .eva-warning-hex,
+    .eva-warning-hex--berserk .eva-warning-hex__label {
+      animation: none !important;
+    }
+  }
 }

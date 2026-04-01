@@ -1,0 +1,2 @@
+=== Task: Review shared styles (animations.css, hud-chrome.css, layers.css): check all keyframes referenced are defined, z-index consistency, berserk state completeness ===
+=== Started: Wed Apr  1 05:08:54 PM UTC 2026 ===

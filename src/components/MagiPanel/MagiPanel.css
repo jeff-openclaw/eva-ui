@@ -112,4 +112,11 @@
   .eva-magi-panel__sync-ja {
     font-family: var(--eva-font-ja);
   }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .eva-magi-panel--pulse {
+      animation: none !important;
+    }
+  }
 }

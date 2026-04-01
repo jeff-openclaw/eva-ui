@@ -2,7 +2,7 @@
   .eva-hud-modal__backdrop {
     position: fixed;
     inset: 0;
-    z-index: 39;
+    z-index: calc(var(--eva-layer-modal, 40) - 1);
     background: rgba(0, 0, 0, 0.85);
     display: flex;
     align-items: center;
@@ -12,7 +12,7 @@
 
   .eva-hud-modal {
     position: relative;
-    z-index: 40;
+    z-index: var(--eva-layer-modal, 40);
     width: 90%;
     animation: hud-arrive-center 200ms ease-out both;
     border: 1px solid var(--eva-gold);
