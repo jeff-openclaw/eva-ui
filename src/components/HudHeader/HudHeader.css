@@ -39,4 +39,10 @@
     letter-spacing: var(--eva-tracking-wider);
     text-transform: uppercase;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .eva-hud-header {
+      animation: none;
+    }
+  }
 }

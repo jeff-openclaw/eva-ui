@@ -72,7 +72,7 @@ function HudSidebarLogo({ children }: { children?: ReactNode }): React.JSX.Eleme
 
 /** Navigation container. */
 function HudSidebarNav({ children }: { children?: ReactNode }): React.JSX.Element {
-  return <nav className="eva-hud-sidebar__nav">{children}</nav>;
+  return <nav aria-label="Sidebar" className="eva-hud-sidebar__nav">{children}</nav>;
 }
 
 /** Individual nav entry. */
@@ -80,6 +80,7 @@ function HudSidebarNavItem({ label, active, onClick }: HudSidebarNavItemProps): 
   return (
     <button
       className={`eva-hud-sidebar__nav-item${active ? ' eva-hud-sidebar__nav-item--active' : ''}`}
+      aria-current={active ? 'page' : undefined}
       onClick={onClick}
       type="button"
     >

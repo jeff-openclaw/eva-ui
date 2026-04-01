@@ -111,4 +111,14 @@
     color: var(--eva-text-dim);
     letter-spacing: var(--eva-tracking-wider);
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .eva-hud-sidebar {
+      animation: none;
+    }
+
+    .eva-hud-sidebar__nav-item {
+      transition: none;
+    }
+  }
 }

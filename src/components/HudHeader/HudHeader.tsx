@@ -39,13 +39,14 @@ export function HudHeader({
   if (!visible) return null;
 
   return (
-    <div
+    <header
+      role="banner"
       className={`eva-hud-chrome eva-hud-header${className ? ` ${className}` : ''}`}
       data-animate
       style={height ? { height: typeof height === 'number' ? `${height}px` : height } : undefined}
     >
       {children}
-    </div>
+    </header>
   );
 }
 
