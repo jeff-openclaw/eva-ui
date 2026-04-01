@@ -1,2 +1,23 @@
 === Task: Review HexCell: check clip-path interaction with borders, state transitions, keyboard handling, edge cases with colSpan/rowSpan ===
 === Started: Wed Apr  1 12:10:01 PM UTC 2026 ===
+All clean. Here's a summary of what was found and fixed:
+
+## HexCell Review — Issues Fixed
+
+### CSS Bugs (HexCell.css)
+
+1. **State backgrounds overrode clipped border trick** — The dual-background border simulation on `.eva-hex-cell--clipped` was defeated by state rules (`.eva-hex-cell--default`, `--active`, etc.) that set `background` directly with equal specificity. **Fix:** Refactored to use CSS custom properties (`--_hex-bg`, `--_hex-border`) that state rules update instead. The `background` shorthand is only set once in the clipped/non-clipped selectors and reads from these variables.
+
+2. **Focus outline invisible on clipped cells** — `clip-path` clips `outline`, making the `:focus-visible` ring invisible. **Fix:** Replaced `outline` with `box-shadow: inset 0 0 0 2px var(--eva-gold)` which renders inside the clip path.
+
+3. **Interactive hover overrode active state** — `:hover` only excluded `--warning` but not `--active`, so hovering an active cell would flash the wrong color. **Fix:** Added `:not(.eva-hex-cell--active)` to the hover selector.
+
+### TSX Bug (HexCell.tsx)
+
+4. **Disabled interactive cells still got cursor/interactive class** — When `state='disabled'` + `interactive={true}`, the `eva-hex-cell--interactive` class (with `cursor: pointer`) was still applied. **Fix:** Extracted `isDisabled`/`isInteractive` derived state; the interactive class, tabIndex, and handlers all gate on `isInteractive` (which is false when disabled).
+
+### Already Correct (from prior review)
+- `prefers-reduced-motion` for warning animation — already present
+- `role="button"` preserved when disabled (correct for ARIA — `aria-disabled` communicates the state)
+- `tabIndex`/handlers already gated on `state !== 'disabled'` (consolidated into the cleaner `isInteractive` pattern)
+=== Finished: Wed Apr  1 12:11:50 PM UTC 2026 === Exit: 0 ===

@@ -1,5 +1,7 @@
 @layer eva-ui {
   .eva-hex-cell {
+    --_hex-bg: var(--eva-hex-fill);
+    --_hex-border: var(--eva-border);
     position: relative;
     width: 100%;
     height: 100%;
@@ -17,36 +19,42 @@
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   }
 
-  /* ── Border (simulated with box-shadow since clip-path clips borders) ── */
-  .eva-hex-cell:not(.eva-hex-cell--no-border) {
-    /* For non-clipped cells, use real border */
-    border: 1px solid var(--eva-border);
-  }
-  .eva-hex-cell--clipped:not(.eva-hex-cell--no-border) {
-    /* Clipped cells: real borders are clipped, so simulate via background gradients.
-       Needs explicit border (transparent) so padding-box vs border-box differ. */
-    border: 2px solid transparent;
-    background:
-      linear-gradient(var(--eva-hex-fill, #0a0a12), var(--eva-hex-fill, #0a0a12)) padding-box,
-      linear-gradient(var(--eva-border, #334), var(--eva-border, #334)) border-box;
+  /* ── Border ── */
+  .eva-hex-cell:not(.eva-hex-cell--no-border):not(.eva-hex-cell--clipped) {
+    border: 1px solid var(--_hex-border);
   }
 
-  /* ── State: default ── */
-  .eva-hex-cell--default {
-    background: var(--eva-hex-fill);
+  /* Clipped cells: real borders and outlines are clipped, so simulate border
+     via dual background (padding-box fill + border-box stroke). State rules
+     update --_hex-bg/--_hex-border instead of overriding background directly. */
+  .eva-hex-cell--clipped:not(.eva-hex-cell--no-border) {
+    border: 2px solid transparent;
+    background:
+      linear-gradient(var(--_hex-bg), var(--_hex-bg)) padding-box,
+      linear-gradient(var(--_hex-border), var(--_hex-border)) border-box;
   }
+
+  /* Clipped cells without border just use the fill */
+  .eva-hex-cell--clipped.eva-hex-cell--no-border {
+    background: var(--_hex-bg);
+  }
+
+  /* Non-clipped cells use background directly */
+  .eva-hex-cell:not(.eva-hex-cell--clipped) {
+    background: var(--_hex-bg);
+  }
+
+  /* ── State: default ── (uses initial --_hex-bg) */
 
   /* ── State: active ── */
   .eva-hex-cell--active {
-    background: var(--eva-hex-active);
-  }
-  .eva-hex-cell--active:not(.eva-hex-cell--no-border) {
-    border-color: var(--eva-crimson);
+    --_hex-bg: var(--eva-hex-active);
+    --_hex-border: var(--eva-crimson);
   }
 
   /* ── State: hover ── */
   .eva-hex-cell--hover {
-    background: var(--eva-hex-hover);
+    --_hex-bg: var(--eva-hex-hover);
   }
 
   /* ── State: disabled ── */
@@ -55,8 +63,10 @@
     pointer-events: none;
   }
 
-  /* ── State: warning (delegates to WarningHex pulse) ── */
+  /* ── State: warning ── */
   .eva-hex-cell--warning {
+    --_hex-bg: var(--pulse-low, rgba(204, 17, 17, 0.15));
+    --_hex-border: var(--eva-crimson);
     --pulse-low: rgba(204, 17, 17, 0.15);
     --pulse-high: rgba(204, 17, 17, 0.40);
     --pulse-color: var(--eva-crimson);
@@ -67,7 +77,7 @@
   @media (prefers-reduced-motion: reduce) {
     .eva-hex-cell--warning {
       animation: none;
-      background-color: var(--pulse-high);
+      --_hex-bg: var(--pulse-high, rgba(204, 17, 17, 0.40));
     }
   }
 
@@ -77,12 +87,13 @@
     user-select: none;
   }
 
-  .eva-hex-cell--interactive:not(.eva-hex-cell--disabled):not(.eva-hex-cell--warning):hover {
-    background: var(--eva-hex-active);
+  .eva-hex-cell--interactive:not(.eva-hex-cell--active):not(.eva-hex-cell--warning):hover {
+    --_hex-bg: var(--eva-hex-active);
   }
 
+  /* Focus: use inset box-shadow instead of outline so it works with clip-path */
   .eva-hex-cell--interactive:focus-visible {
-    outline: 2px solid var(--eva-gold);
-    outline-offset: -2px;
+    box-shadow: inset 0 0 0 2px var(--eva-gold);
+    outline: none;
   }
 }
