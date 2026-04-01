@@ -1,0 +1,24 @@
+@layer eva-ui {
+  /* ── Full Demo: Live Clock ── */
+  .eva-full-demo-clock {
+    font-family: var(--eva-font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.75rem;
+    color: var(--eva-text-gold);
+    letter-spacing: 0.08em;
+  }
+
+  .eva-full-demo-clock__colon {
+    animation: eva-clock-blink 1s step-end infinite;
+  }
+
+  @keyframes eva-clock-blink {
+    50% { opacity: 0.3; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .eva-full-demo-clock__colon {
+      animation: none;
+    }
+  }
+}

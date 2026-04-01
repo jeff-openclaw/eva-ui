@@ -4,11 +4,15 @@ import { HexDashboard } from './HexDashboard';
 import { HexCell } from '../HexCell';
 import { MagiPanel } from '../MagiPanel';
 import { MagiConsole } from '../MagiConsole';
+import { HudHeader } from '../HudHeader';
+import { HudSidebar } from '../HudSidebar';
+import { HazardStripes } from '../HazardStripes';
 import type { MagiVote } from '../MagiPanel';
 import './TestSuiteDemo.css';
 import './MetricDemo.css';
 import './MagiVotingDemo.css';
 import './ActivityFeedDemo.css';
+import './FullDemo.css';
 
 const fullscreen: React.CSSProperties = {
   width: '100vw',
@@ -772,6 +776,204 @@ export const ActivityFeed: Story = {
         </div>
       </HexCell>
       <HexCell col={5} row={2} size="sm">
+        <div style={{ color: 'var(--eva-text-dim)', fontFamily: 'var(--eva-font-mono)', fontSize: '0.5rem', textAlign: 'center' }}>
+          <div style={{ fontSize: '0.75rem' }}>24</div>
+          <div>SKIP</div>
+        </div>
+      </HexCell>
+    </HexDashboard>
+  ),
+};
+
+/* ── Full Demo: Polished Layout ── */
+
+/**
+ * LiveClock — displays current UTC time with blinking colon separator.
+ * Updates every second. Respects prefers-reduced-motion.
+ */
+function LiveClock(): React.JSX.Element {
+  const [now, setNow] = useState(new Date());
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const h = String(now.getUTCHours()).padStart(2, '0');
+  const m = String(now.getUTCMinutes()).padStart(2, '0');
+  const s = String(now.getUTCSeconds()).padStart(2, '0');
+
+  return (
+    <span className="eva-full-demo-clock" aria-label={`${h}:${m}:${s} UTC`} role="timer">
+      {h}<span className="eva-full-demo-clock__colon">:</span>{m}<span className="eva-full-demo-clock__colon">:</span>{s} UTC
+    </span>
+  );
+}
+
+/**
+ * Full demo — polished layout with balanced hex grid, HazardStripes between zones,
+ * sidebar with section dividers, and header with live clock.
+ * Combines test suites, metrics, MAGI voting, and activity feed.
+ */
+export const FullDemo: Story = {
+  decorators: [(Story) => <div style={fullscreen}><Story /></div>],
+  render: (args) => (
+    <HexDashboard
+      {...args}
+      atmosphere
+      cellSize={48}
+      gap={4}
+      minGapSize={64}
+      gapDistribution="left"
+      gapDistributionVertical="top"
+      zones={{
+        top: (
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <HudHeader scanlines>
+              <HudHeader.Title subtitle="第壱中央指令所">NERV TEST COMMAND</HudHeader.Title>
+              <HudHeader.Status>
+                <LiveClock />
+              </HudHeader.Status>
+            </HudHeader>
+            <HazardStripes height={3} animated speed={15} />
+          </div>
+        ),
+        left: (
+          <div style={{ display: 'flex', height: '100%' }}>
+            <div style={{ flex: 1 }}>
+              <HudSidebar hazardAccent scanlines>
+                <HudSidebar.Logo>NERV</HudSidebar.Logo>
+                <HudSidebar.Section label="MONITORING">
+                  <HudSidebar.Nav>
+                    <HudSidebar.NavItem label="DASHBOARD" active />
+                    <HudSidebar.NavItem label="TEST SUITES" />
+                    <HudSidebar.NavItem label="METRICS" />
+                  </HudSidebar.Nav>
+                </HudSidebar.Section>
+                <HudSidebar.Section label="SYSTEMS">
+                  <HudSidebar.Nav>
+                    <HudSidebar.NavItem label="MAGI STATUS" />
+                    <HudSidebar.NavItem label="ALERTS" />
+                    <HudSidebar.NavItem label="EVENT LOG" />
+                  </HudSidebar.Nav>
+                </HudSidebar.Section>
+                <HudSidebar.Section label="CONFIG">
+                  <HudSidebar.Nav>
+                    <HudSidebar.NavItem label="SETTINGS" />
+                    <HudSidebar.NavItem label="PROFILES" />
+                  </HudSidebar.Nav>
+                </HudSidebar.Section>
+                <HudSidebar.Footer>
+                  <span style={{ fontFamily: 'var(--eva-font-mono)', fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>v3.01 — MAGI OS</span>
+                </HudSidebar.Footer>
+              </HudSidebar>
+            </div>
+            <HazardStripes angle={90} height="100%" stripeWidth={2} animated speed={10} />
+          </div>
+        ),
+        bottom: (
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <HazardStripes height={2} animated speed={12} />
+            <div style={{
+              height: '100%',
+              background: 'var(--eva-deep)',
+              borderTop: '1px solid var(--eva-gold)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '0 16px',
+              fontFamily: 'var(--eva-font-mono)',
+              fontSize: '0.5rem',
+              color: 'var(--eva-text-dim)',
+            }}>
+              <span>MAGI SYSTEM: <span style={{ color: 'var(--eva-text-gold)' }}>NOMINAL</span></span>
+              <span>SYNC ACTIVE • 6 SUITES • 830 TESTS</span>
+            </div>
+          </div>
+        ),
+      }}
+    >
+      {/* Row 0: Key metrics — large prominent cells */}
+      <HexCell col={0} row={0} size="lg" state="active">
+        <MetricCell metric={metrics[0] as MetricData} />
+      </HexCell>
+      <HexCell col={2} row={0} size="lg" state="active">
+        <MetricCell metric={metrics[1] as MetricData} />
+      </HexCell>
+      <HexCell col={4} row={0} size="lg" state="active">
+        <MetricCell metric={metrics[4] as MetricData} />
+      </HexCell>
+
+      {/* Row 1: Small status indicators */}
+      <HexCell col={7} row={1} size="sm" state="active">
+        <div style={{ color: '#22cc44', fontFamily: 'var(--eva-font-mono)', fontSize: '0.5rem', textAlign: 'center' }}>
+          <div style={{ fontSize: '0.75rem' }}>97.1%</div>
+          <div style={{ color: 'var(--eva-text-dim)' }}>PASS</div>
+        </div>
+      </HexCell>
+      <HexCell col={8} row={1} size="sm" state="warning">
+        <div style={{ color: 'var(--eva-crimson)', fontFamily: 'var(--eva-font-mono)', fontSize: '0.5rem', textAlign: 'center' }}>
+          <div style={{ fontSize: '0.75rem' }}>17</div>
+          <div style={{ color: 'var(--eva-text-dim)' }}>FAIL</div>
+        </div>
+      </HexCell>
+
+      {/* Row 2: MAGI voting panels */}
+      {magiVotes.map((data, i) => (
+        <HexCell
+          key={data.system}
+          col={i * 2}
+          row={2}
+          size="lg"
+          state={data.vote === 'deny' ? 'warning' : 'active'}
+        >
+          <MagiVoteCell data={data} />
+        </HexCell>
+      ))}
+
+      {/* Row 2 right: compact test suite cells */}
+      <HexCell col={6} row={2} state="active">
+        <TestSuiteCell suite={suites[0] as TestSuiteData} />
+      </HexCell>
+      <HexCell col={8} row={2} state="active">
+        <TestSuiteCell suite={suites[2] as TestSuiteData} />
+      </HexCell>
+
+      {/* Row 4: Build verdict + activity feed */}
+      <HexCell col={0} row={4} colSpan={3} size="lg" state="active">
+        <div className="eva-magi-vote-console">
+          <div className="eva-magi-vote-console__label">BUILD VERDICT</div>
+          <div className="eva-magi-vote-console__label-ja">ビルド判定</div>
+          <MagiConsole
+            votes={{
+              melchior: magiVotes[0]?.vote,
+              balthasar: magiVotes[1]?.vote,
+              caspar: magiVotes[2]?.vote,
+            }}
+            syncRates={{
+              melchior: magiVotes[0]?.syncRate,
+              balthasar: magiVotes[1]?.syncRate,
+              caspar: magiVotes[2]?.syncRate,
+            }}
+            title="BUILD STATUS"
+            titleJa="ビルド状態"
+            showJapanese
+            pulse
+          />
+        </div>
+      </HexCell>
+      <HexCell col={4} row={4} colSpan={3} rowSpan={2} size="lg" state="active">
+        <ActivityFeedCell />
+      </HexCell>
+
+      {/* Row 4-5 right: more small status */}
+      <HexCell col={8} row={4} size="sm" state="active">
+        <div style={{ color: 'var(--eva-text-gold)', fontFamily: 'var(--eva-font-mono)', fontSize: '0.5rem', textAlign: 'center' }}>
+          <div style={{ fontSize: '0.75rem' }}>830</div>
+          <div style={{ color: 'var(--eva-text-dim)' }}>TOTAL</div>
+        </div>
+      </HexCell>
+      <HexCell col={8} row={5} size="sm">
         <div style={{ color: 'var(--eva-text-dim)', fontFamily: 'var(--eva-font-mono)', fontSize: '0.5rem', textAlign: 'center' }}>
           <div style={{ fontSize: '0.75rem' }}>24</div>
           <div>SKIP</div>
