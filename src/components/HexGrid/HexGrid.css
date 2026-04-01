@@ -28,6 +28,10 @@
     overflow: hidden;
   }
 
+  .eva-hex-grid__cell--large {
+    z-index: 2;
+  }
+
   .eva-hex-grid__scanlines {
     position: absolute;
     inset: 0;

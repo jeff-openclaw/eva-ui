@@ -169,6 +169,45 @@ export function HexDashboard({
     '--corridor-angle': `${corridorAngle}deg`,
   } as React.CSSProperties : {};
 
+  // Compute set of background hex keys to suppress (covered by large cells)
+  const suppressedBgKeys = useMemo(() => {
+    if (!layout) return new Set<string>();
+    const suppressed = new Set<string>();
+    Children.forEach(children, (child) => {
+      if (!isValidElement(child)) return;
+      const props = child.props as HexCellProps;
+      if (props.col == null || props.row == null) return;
+      const sizeMultiplier = resolveHexCellSize(props.size);
+      const colSpan = props.colSpan ?? 1;
+      if (sizeMultiplier <= 1 && colSpan <= 1 && (props.rowSpan ?? 1) <= 1) return;
+      // Compute pixel center of this cell
+      const cx = props.col * layout.horizSpacing
+        + (props.row % 2 === 1 ? layout.horizSpacing / 2 : 0)
+        + layout.cellWidth / 2;
+      const cy = props.row * layout.vertSpacing + (layout.cellHeight / 2);
+      const radius = effectiveSize * Math.max(sizeMultiplier, colSpan) * 0.9;
+      // Scan nearby grid cells and suppress those within radius
+      const scanRange = Math.ceil(Math.max(sizeMultiplier, colSpan)) + 1;
+      for (let dr = -scanRange; dr <= scanRange; dr++) {
+        for (let dc = -scanRange; dc <= scanRange; dc++) {
+          const r = props.row + dr;
+          const c = props.col + dc;
+          if (r < 0 || r >= layout.rows || c < 0 || c >= layout.cols) continue;
+          const hx = c * layout.horizSpacing
+            + (r % 2 === 1 ? layout.horizSpacing / 2 : 0)
+            + layout.cellWidth / 2;
+          const hy = r * layout.vertSpacing + (layout.cellHeight / 2);
+          const dx = hx - cx;
+          const dy = hy - cy;
+          if (Math.sqrt(dx * dx + dy * dy) < radius) {
+            suppressed.add(`${c},${r}`);
+          }
+        }
+      }
+    });
+    return suppressed;
+  }, [children, layout, effectiveSize]);
+
   // Background SVG
   const svgWidth = layout ? layout.gridWidth : 0;
   const svgHeight = layout ? layout.gridHeight : 0;
@@ -192,6 +231,8 @@ export function HexDashboard({
             >
               {Array.from({ length: layout.rows }, (_, row) =>
                 Array.from({ length: layout.cols }, (_, col) => {
+                  // Skip background hexes covered by large cells
+                  if (suppressedBgKeys.has(`${col},${row}`)) return null;
                   const cx = col * layout.horizSpacing
                     + (row % 2 === 1 ? layout.horizSpacing / 2 : 0)
                     + layout.cellWidth / 2;
