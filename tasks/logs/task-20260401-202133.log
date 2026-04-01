@@ -1,0 +1,22 @@
+=== Task: HudAlert severity visuals: Each severity level should be immediately distinguishable at a glance. Info = calm gold glow, caution = warmer amber pulse, warning = urgent orange with faster pulse, critical = aggressive red with scanline interference effect. The alerts should feel like system warnings on a CRT display. ===
+=== Started: Wed Apr  1 08:21:33 PM UTC 2026 ===
+Type check passes. Here's a summary of what was found and fixed:
+
+### Issues fixed in `HudAlert.css`
+
+| Severity | Before (bug) | After (fix) |
+|----------|-------------|-------------|
+| **Info** | No glow — visually flat, indistinguishable from caution | Added calm gold `box-shadow` (inset warmth + outer glow + border ring) |
+| **Caution** | Same `--eva-gold` border as info, no pulse animation | Changed border to `--eva-stripe` (amber #ffaa00), added slow 3s amber pulse |
+| **Warning** | Used red `--eva-warning` (#ff2200), slow 2s pulse | Changed to orange `--eva-hot` (#ff4400), faster 1.2s pulse |
+| **Critical** | Just a fast red pulse, no CRT interference feel | Bumped pulse to 0.6s, added `::after` scanline overlay with `scanline-drift` + `scanline-flicker` animations for CRT interference |
+
+### Other fix
+- **Missing reduced-motion**: The new critical `::after` scanline animation needed its own `prefers-reduced-motion: reduce` rule (the existing one in `animations.css` only targets elements with `data-animate`, not pseudo-elements).
+
+### Visual hierarchy now
+- **Info**: Static gold glow — calm, informational
+- **Caution**: Slow amber pulse (3s) — draws mild attention
+- **Warning**: Faster orange pulse (1.2s) — urgent
+- **Critical**: Aggressive red pulse (0.6s) + drifting red scanlines with flicker — CRT system failure
+=== Finished: Wed Apr  1 08:23:29 PM UTC 2026 === Exit: 0 ===
