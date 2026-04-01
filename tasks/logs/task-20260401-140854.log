@@ -1,0 +1,2 @@
+=== Task: Review HudAlert + HudTooltip: alert stacking (limit 3 per CTO decision), auto-dismiss cleanup, tooltip positioning edge cases (viewport overflow), portal vs inline rendering ===
+=== Started: Wed Apr  1 02:08:54 PM UTC 2026 ===

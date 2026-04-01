@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect, cloneElement, type ReactElement, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import './HudTooltip.css';
 
 /** Props for the HudTooltip component. */
@@ -60,6 +61,11 @@ export function HudTooltip({
         break;
     }
 
+    // Clamp to viewport to prevent overflow
+    const pad = 4;
+    top = Math.max(pad, Math.min(top, window.innerHeight - tooltip.height - pad));
+    left = Math.max(pad, Math.min(left, window.innerWidth - tooltip.width - pad));
+
     setPosition({ top, left });
   }, [placement]);
 
@@ -90,16 +96,18 @@ export function HudTooltip({
         onFocus: show,
         onBlur: hide,
       } as Record<string, unknown>)}
-      {visible && (
-        <div
-          ref={tooltipRef}
-          className={`eva-hud-tooltip eva-hud-tooltip--${placement}${className ? ` ${className}` : ''}`}
-          role="tooltip"
-          style={{ top: position.top, left: position.left }}
-        >
-          {content}
-        </div>
-      )}
+      {visible &&
+        createPortal(
+          <div
+            ref={tooltipRef}
+            className={`eva-hud-tooltip eva-hud-tooltip--${placement}${className ? ` ${className}` : ''}`}
+            role="tooltip"
+            style={{ position: 'fixed', top: position.top, left: position.left }}
+          >
+            {content}
+          </div>,
+          document.body,
+        )}
     </>
   );
 }
