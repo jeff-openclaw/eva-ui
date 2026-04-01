@@ -1,0 +1,18 @@
+=== Task: Review CountdownTimer: auto-decrement accuracy (drift over time), state transitions at thresholds, expired callback, format switching ===
+=== Started: Wed Apr  1 02:41:51 PM UTC 2026 ===
+All clean. Here's the summary:
+
+## Fixes applied
+
+### Bug: Timer drift (line 66-82)
+`remaining` was in the interval effect's dependency array, causing the `setInterval` to be torn down and recreated every second. Each cycle adds small overhead that accumulates into noticeable drift over minutes. Fixed by removing `remaining` from deps and self-clearing the interval at zero inside the callback. `initialSeconds` is kept in deps so external resets restart the interval.
+
+### Bug: No external reset when `autoStart` is true (line 60-64)
+The sync effect had a `!autoStart` guard, so changing the `seconds` prop while auto-counting had no effect. Removed the guard — the timer now always syncs with the parent prop, and also resets `expiredRef` so `onExpire` can fire again on a subsequent countdown.
+
+### Missing: `prefers-reduced-motion` (CSS)
+The `warning-pulse` and `berserk-text` animations had no reduced-motion override, violating the project's CSS convention. Added a `@media (prefers-reduced-motion: reduce)` rule that disables all three animated selectors.
+
+### Missing: Accessibility attributes (line 102-106)
+Added `role="timer"`, `aria-live` (polite in normal/warning, assertive in critical/expired), and `aria-label` so screen readers announce the countdown and escalate urgency appropriately.
+=== Finished: Wed Apr  1 02:44:21 PM UTC 2026 === Exit: 0 ===

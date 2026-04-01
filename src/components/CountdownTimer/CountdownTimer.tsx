@@ -57,19 +57,29 @@ export function CountdownTimer({
   const [remaining, setRemaining] = useState(initialSeconds);
   const expiredRef = useRef(false);
 
-  // Sync with external seconds prop when not auto-starting
+  // Sync with external seconds prop
   useEffect(() => {
-    if (!autoStart) setRemaining(initialSeconds);
-  }, [initialSeconds, autoStart]);
+    setRemaining(initialSeconds);
+    if (initialSeconds > 0) expiredRef.current = false;
+  }, [initialSeconds]);
 
-  // Auto-decrement
+  // Auto-decrement — interval stays alive until paused/stopped, avoiding
+  // per-tick teardown that causes cumulative drift.
   useEffect(() => {
-    if (!autoStart || paused || remaining <= 0) return;
-    const timer = setInterval(() => {
-      setRemaining((prev) => Math.max(0, prev - 1));
+    if (!autoStart || paused) return;
+    const id = setInterval(() => {
+      setRemaining((prev) => {
+        if (prev <= 0) {
+          clearInterval(id);
+          return 0;
+        }
+        return prev - 1;
+      });
     }, 1000);
-    return () => clearInterval(timer);
-  }, [autoStart, paused, remaining]);
+    return () => clearInterval(id);
+    // initialSeconds restarts the interval after an external reset
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoStart, paused, initialSeconds]);
 
   // Expire callback
   useEffect(() => {
@@ -89,7 +99,12 @@ export function CountdownTimer({
         : 'normal';
 
   return (
-    <div className={`eva-countdown eva-countdown--${state}${className ? ` ${className}` : ''}`}>
+    <div
+      role="timer"
+      aria-live={state === 'critical' || state === 'expired' ? 'assertive' : 'polite'}
+      aria-label={`${labelSub}: ${formatTime(remaining, format)}`}
+      className={`eva-countdown eva-countdown--${state}${className ? ` ${className}` : ''}`}
+    >
       <div className="eva-countdown__label">{label}</div>
       <div className="eva-countdown__label-sub">{labelSub}</div>
       <div className="eva-countdown__time">{formatTime(remaining, format)}</div>

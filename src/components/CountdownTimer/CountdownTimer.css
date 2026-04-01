@@ -78,4 +78,13 @@
     margin-top: var(--eva-space-1);
     letter-spacing: var(--eva-tracking-wide);
   }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .eva-countdown--warning,
+    .eva-countdown--critical,
+    .eva-countdown--critical .eva-countdown__time {
+      animation: none;
+    }
+  }
 }
