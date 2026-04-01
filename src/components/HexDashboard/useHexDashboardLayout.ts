@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   computeHexDashboardLayout,
   type HexDashboardLayout,
@@ -14,8 +14,6 @@ export function useHexDashboardLayout(
   config: HexDashboardLayoutConfig,
 ): HexDashboardLayout | null {
   const [layout, setLayout] = useState<HexDashboardLayout | null>(null);
-  const configRef = useRef(config);
-  configRef.current = config;
 
   useEffect(() => {
     const el = containerRef.current;
@@ -26,7 +24,7 @@ export function useHexDashboardLayout(
     const recompute = () => {
       const { width, height } = el.getBoundingClientRect();
       if (width > 0 && height > 0) {
-        setLayout(computeHexDashboardLayout(width, height, configRef.current));
+        setLayout(computeHexDashboardLayout(width, height, config));
       }
     };
 
@@ -42,7 +40,7 @@ export function useHexDashboardLayout(
       observer.disconnect();
       if (rafId != null) cancelAnimationFrame(rafId);
     };
-  }, [containerRef]);
+  }, [containerRef, config]);
 
   return layout;
 }

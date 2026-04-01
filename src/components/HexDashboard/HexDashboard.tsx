@@ -1,12 +1,11 @@
-import { useRef, useMemo, Children, isValidElement, type ReactNode } from 'react';
+import { useRef, useMemo, useEffect, Children, isValidElement, type ReactNode } from 'react';
 import { useHexDashboardLayout } from './useHexDashboardLayout';
 import {
   type GapDistribution,
   type GapDistributionVertical,
   type HexDashboardLayout,
 } from './computeLayout';
-import { offsetToAxial, hexToPixel, hexRectangle, POINTY, SQRT3 } from '../../utils/hexGeometry';
-import type { HexLayout } from '../../utils/hexTypes';
+import { SQRT3 } from '../../utils/hexGeometry';
 import type { HexCellProps } from '../HexCell/HexCell';
 import './HexDashboard.css';
 
@@ -76,6 +75,11 @@ export function HexDashboard({
 }: HexDashboardProps): React.JSX.Element {
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const hasLeftZone = !!zones?.left;
+  const hasRightZone = !!zones?.right;
+  const hasTopZone = !!zones?.top;
+  const hasBottomZone = !!zones?.bottom;
+
   const config = useMemo(() => ({
     cellSize,
     gap,
@@ -83,53 +87,46 @@ export function HexDashboard({
     maxGapSize,
     gapDistribution,
     gapDistributionVertical,
-    hasLeftZone: !!zones?.left,
-    hasRightZone: !!zones?.right,
-    hasTopZone: !!zones?.top,
-    hasBottomZone: !!zones?.bottom,
-  }), [cellSize, gap, minGapSize, maxGapSize, gapDistribution, gapDistributionVertical, zones?.left, zones?.right, zones?.top, zones?.bottom]);
+    hasLeftZone,
+    hasRightZone,
+    hasTopZone,
+    hasBottomZone,
+  }), [cellSize, gap, minGapSize, maxGapSize, gapDistribution, gapDistributionVertical, hasLeftZone, hasRightZone, hasTopZone, hasBottomZone]);
 
   const layout = useHexDashboardLayout(containerRef, config);
 
   // Fire callback on layout change
-  useMemo(() => {
+  useEffect(() => {
     if (layout && onLayoutChange) onLayoutChange(layout);
   }, [layout, onLayoutChange]);
 
-  // Build hex layout for positioning cells
   const effectiveSize = cellSize - gap / 2;
-  const hexLayout: HexLayout = useMemo(() => ({
-    size: effectiveSize,
-    origin: { x: 0, y: 0 }, // offset applied via gridOrigin
-    orientation: POINTY,
-  }), [effectiveSize]);
 
-  // Background hex grid
-  const bgHexes = useMemo(() => {
-    if (!layout) return [];
-    return hexRectangle(layout.cols, layout.rows);
-  }, [layout]);
-
-  // Position HexCell children
+  // Position HexCell children using layout spacing directly
   const positionedChildren = useMemo(() => {
     if (!layout) return null;
-    const cellWidth = SQRT3 * effectiveSize;
-    const cellHeight = 2 * effectiveSize;
+    const visualW = SQRT3 * effectiveSize;
+    const visualH = 2 * effectiveSize;
 
     return Children.map(children, (child) => {
       if (!isValidElement(child)) return child;
       const props = child.props as HexCellProps;
       if (props.col == null || props.row == null) return child;
 
-      const axial = offsetToAxial(props.col, props.row);
-      const pixel = hexToPixel(axial, hexLayout);
+      // Offset-coordinate → pixel center within the grid container
+      const cx = props.col * layout.horizSpacing
+        + (props.row % 2 === 1 ? layout.horizSpacing / 2 : 0)
+        + layout.cellWidth / 2;
+      const cy = props.row * layout.vertSpacing + cellSize;
 
-      const spanW = (props.colSpan ?? 1) > 1
-        ? cellWidth * (props.colSpan ?? 1) + gap * ((props.colSpan ?? 1) - 1)
-        : cellWidth;
-      const spanH = (props.rowSpan ?? 1) > 1
-        ? cellHeight * (props.rowSpan ?? 1) + gap * ((props.rowSpan ?? 1) - 1)
-        : cellHeight;
+      const colSpan = props.colSpan ?? 1;
+      const rowSpan = props.rowSpan ?? 1;
+      const spanW = colSpan > 1
+        ? (colSpan - 1) * layout.horizSpacing + visualW
+        : visualW;
+      const spanH = rowSpan > 1
+        ? (rowSpan - 1) * layout.vertSpacing + visualH
+        : visualH;
 
       return (
         <div
@@ -137,8 +134,8 @@ export function HexDashboard({
           className="eva-hex-dashboard__cell-wrapper"
           style={{
             position: 'absolute',
-            left: layout.gridOrigin.x + pixel.x - spanW / 2,
-            top: layout.gridOrigin.y + pixel.y - spanH / 2,
+            left: cx - spanW / 2,
+            top: cy - spanH / 2,
             width: spanW,
             height: spanH,
           }}
@@ -147,7 +144,7 @@ export function HexDashboard({
         </div>
       );
     });
-  }, [children, layout, hexLayout, effectiveSize, gap]);
+  }, [children, layout, effectiveSize, cellSize]);
 
   // CSS custom properties for zone dimensions
   const dashboardStyle = layout ? {
@@ -187,28 +184,30 @@ export function HexDashboard({
               height={svgHeight}
               viewBox={`0 0 ${svgWidth} ${svgHeight}`}
             >
-              {bgHexes.map((h) => {
-                const pixel = hexToPixel(h, {
-                  ...hexLayout,
-                  origin: { x: layout.cellWidth / 2, y: effectiveSize },
-                });
-                const corners = [];
-                for (let i = 0; i < 6; i++) {
-                  const angle = (2 * Math.PI * (i + 0.5)) / 6;
-                  corners.push(
-                    `${pixel.x + effectiveSize * Math.cos(angle)},${pixel.y + effectiveSize * Math.sin(angle)}`
+              {Array.from({ length: layout.rows }, (_, row) =>
+                Array.from({ length: layout.cols }, (_, col) => {
+                  const cx = col * layout.horizSpacing
+                    + (row % 2 === 1 ? layout.horizSpacing / 2 : 0)
+                    + layout.cellWidth / 2;
+                  const cy = row * layout.vertSpacing + cellSize;
+                  const corners = [];
+                  for (let i = 0; i < 6; i++) {
+                    const angle = (2 * Math.PI * (i + 0.5)) / 6;
+                    corners.push(
+                      `${cx + effectiveSize * Math.cos(angle)},${cy + effectiveSize * Math.sin(angle)}`
+                    );
+                  }
+                  return (
+                    <polygon
+                      key={`${col},${row}`}
+                      points={corners.join(' ')}
+                      fill="var(--eva-hex-fill)"
+                      stroke="var(--eva-border)"
+                      strokeWidth={1}
+                    />
                   );
-                }
-                return (
-                  <polygon
-                    key={`${h.q},${h.r}`}
-                    points={corners.join(' ')}
-                    fill="var(--eva-hex-fill)"
-                    stroke="var(--eva-border)"
-                    strokeWidth={1}
-                  />
-                );
-              })}
+                })
+              )}
             </svg>
 
             {/* Positioned HexCell children */}
