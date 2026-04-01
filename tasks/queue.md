@@ -18,5 +18,5 @@ The cron job picks the first unchecked `[ ]` task and runs Claude Code on it.
 - [x] Review MagiPanel + MagiConsole + WarningHex: vote state transitions, pulse animations, sync rate bar, majority vote logic, berserk state rendering
 - [x] Review CountdownTimer: auto-decrement accuracy (drift over time), state transitions at thresholds, expired callback, format switching
 - [x] Review HazardStripes + ScanlineOverlay: animation performance, reduced-motion compliance, CSS custom property fallbacks
-- [ ] Review shared styles (animations.css, hud-chrome.css, layers.css): check all keyframes referenced are defined, z-index consistency, berserk state completeness
-- [ ] Final integration test: build Storybook, verify every story renders without console errors using browser tool
+- [x] Review shared styles (animations.css, hud-chrome.css, layers.css): check all keyframes referenced are defined, z-index consistency, berserk state completeness
+- [x] Final integration test: build Storybook, verify every story renders without console errors using browser tool
