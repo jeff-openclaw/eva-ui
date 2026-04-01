@@ -1,0 +1,130 @@
+@layer eva-ui {
+  /* ── Test Suite Cell ── */
+  .eva-test-suite {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 3px;
+    width: 100%;
+    font-family: var(--eva-font-mono);
+    text-align: center;
+  }
+
+  /* ── Header: name + Japanese subtitle ── */
+  .eva-test-suite__name {
+    font-size: 0.6875rem;
+    font-weight: var(--eva-weight-bold);
+    color: var(--eva-text-gold);
+    letter-spacing: var(--eva-tracking-wide);
+    line-height: var(--eva-leading-tight);
+    text-transform: uppercase;
+  }
+
+  .eva-test-suite__subtitle {
+    font-size: 0.5rem;
+    font-family: var(--eva-font-ja);
+    color: var(--eva-text-dim);
+    line-height: var(--eva-leading-tight);
+  }
+
+  /* ── Stacked bar: pass / fail / skip ── */
+  .eva-test-suite__bar {
+    display: flex;
+    height: 4px;
+    border-radius: 1px;
+    overflow: hidden;
+    margin-top: 2px;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .eva-test-suite__bar-pass {
+    background: #22cc44;
+    height: 100%;
+  }
+
+  .eva-test-suite__bar-fail {
+    background: var(--eva-crimson);
+    height: 100%;
+  }
+
+  .eva-test-suite__bar-skip {
+    background: var(--eva-gold);
+    opacity: 0.6;
+    height: 100%;
+  }
+
+  /* ── Bar legend (counts) ── */
+  .eva-test-suite__counts {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.4375rem;
+    font-variant-numeric: tabular-nums;
+    line-height: var(--eva-leading-tight);
+  }
+
+  .eva-test-suite__count-pass { color: #22cc44; }
+  .eva-test-suite__count-fail { color: var(--eva-crimson); }
+  .eva-test-suite__count-skip { color: var(--eva-gold); opacity: 0.7; }
+
+  /* ── Pass rate + trend arrow ── */
+  .eva-test-suite__rate {
+    font-size: 0.75rem;
+    font-weight: var(--eva-weight-bold);
+    font-variant-numeric: tabular-nums;
+    line-height: var(--eva-leading-tight);
+  }
+
+  .eva-test-suite__rate--good { color: #22cc44; }
+  .eva-test-suite__rate--warn { color: var(--eva-gold); }
+  .eva-test-suite__rate--bad  { color: var(--eva-crimson); }
+
+  .eva-test-suite__trend-up   { color: #22cc44; font-size: 0.5625rem; }
+  .eva-test-suite__trend-down { color: var(--eva-crimson); font-size: 0.5625rem; }
+  .eva-test-suite__trend-flat { color: var(--eva-text-dim); font-size: 0.5625rem; }
+
+  /* ── Timestamp ── */
+  .eva-test-suite__time {
+    font-size: 0.4375rem;
+    color: var(--eva-text-dim);
+    font-variant-numeric: tabular-nums;
+    line-height: var(--eva-leading-tight);
+  }
+
+  /* ── Dot chart: last 10 runs ── */
+  .eva-test-suite__dots {
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+    margin-top: 1px;
+  }
+
+  .eva-test-suite__dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+  }
+
+  .eva-test-suite__dot--pass {
+    background: #22cc44;
+    box-shadow: 0 0 3px rgba(34, 204, 68, 0.5);
+  }
+
+  .eva-test-suite__dot--fail {
+    background: var(--eva-crimson);
+    box-shadow: 0 0 3px rgba(204, 17, 17, 0.5);
+  }
+
+  .eva-test-suite__dot--skip {
+    background: var(--eva-gold);
+    opacity: 0.6;
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .eva-test-suite__dot--pass,
+    .eva-test-suite__dot--fail {
+      box-shadow: none;
+    }
+  }
+}

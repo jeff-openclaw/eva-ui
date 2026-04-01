@@ -1,0 +1,26 @@
+=== Task: DEMO: Richer test suite cells — each suite hex should contain: suite name + Japanese subtitle, pass/fail/skip counts as a stacked bar, pass rate percentage with trend arrow, last run timestamp, a mini sparkline or dot-chart showing recent run history (last 10 runs as colored dots). Use CSS only for the visualizations. ===
+=== Started: Wed Apr  1 08:42:48 PM UTC 2026 ===
+Everything builds cleanly. Here's what I created:
+
+**New files:**
+- `src/components/HexDashboard/TestSuiteDemo.css` — CSS-only visualizations (stacked bar, dot chart, trend indicators) scoped under `@layer eva-ui`
+
+**Modified files:**
+- `src/components/HexDashboard/HexDashboard.stories.tsx` — added `TestSuiteDashboard` story
+
+**What each suite hex contains:**
+1. **Suite name + Japanese subtitle** — e.g. "AUTH" / "認証テスト"
+2. **Stacked bar** — CSS `width: %` segments for pass (green), fail (crimson), skip (gold)
+3. **Pass/fail/skip counts** — color-coded legend below the bar
+4. **Pass rate % with trend arrow** — color shifts: green ≥95%, gold ≥80%, crimson <80%; arrows ▲▼─
+5. **Last run timestamp** — dim monospace
+6. **Dot chart** — 10 colored dots showing recent run history (pass=green glow, fail=crimson glow, skip=gold)
+
+**Quality notes:**
+- All CSS in `@layer eva-ui` per convention
+- `prefers-reduced-motion` removes dot glow shadows
+- ARIA: `role="group"` on suite, `role="img"` with labels on bar and dots
+- `font-variant-numeric: tabular-nums` on numeric values
+- Uses theme tokens throughout (`--eva-font-mono`, `--eva-font-ja`, `--eva-text-dim`, etc.)
+- 6 demo suites positioned across 2 rows with atmosphere enabled; the AT FIELD suite (high fail count) gets `warning` state
+=== Finished: Wed Apr  1 08:46:25 PM UTC 2026 === Exit: 0 ===

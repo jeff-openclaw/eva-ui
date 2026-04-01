@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { HexDashboard } from './HexDashboard';
 import { HexCell } from '../HexCell';
+import './TestSuiteDemo.css';
 
 const fullscreen: React.CSSProperties = {
   width: '100vw',
@@ -239,5 +240,142 @@ export const CorridorEffect: Story = {
         }} />
       ),
     },
+  },
+};
+
+/* ── Test Suite Demo Data ── */
+
+interface TestSuiteData {
+  name: string;
+  subtitle: string;
+  pass: number;
+  fail: number;
+  skip: number;
+  trend: 'up' | 'down' | 'flat';
+  lastRun: string;
+  history: Array<'pass' | 'fail' | 'skip'>;
+}
+
+const suites: TestSuiteData[] = [
+  {
+    name: 'AUTH',
+    subtitle: '認証テスト',
+    pass: 142, fail: 0, skip: 3,
+    trend: 'up',
+    lastRun: '14:32:07',
+    history: ['pass', 'pass', 'fail', 'pass', 'pass', 'pass', 'pass', 'pass', 'pass', 'pass'],
+  },
+  {
+    name: 'SYNC CORE',
+    subtitle: '同期コア',
+    pass: 87, fail: 4, skip: 1,
+    trend: 'down',
+    lastRun: '14:31:52',
+    history: ['pass', 'pass', 'pass', 'fail', 'pass', 'pass', 'fail', 'pass', 'fail', 'fail'],
+  },
+  {
+    name: 'MAGI I/O',
+    subtitle: 'マギ入出力',
+    pass: 201, fail: 0, skip: 0,
+    trend: 'flat',
+    lastRun: '14:30:11',
+    history: ['pass', 'pass', 'pass', 'pass', 'pass', 'pass', 'pass', 'pass', 'pass', 'pass'],
+  },
+  {
+    name: 'AT FIELD',
+    subtitle: 'ATフィールド',
+    pass: 56, fail: 12, skip: 8,
+    trend: 'down',
+    lastRun: '14:29:44',
+    history: ['fail', 'pass', 'fail', 'fail', 'pass', 'skip', 'fail', 'pass', 'fail', 'fail'],
+  },
+  {
+    name: 'ENTRY PLUG',
+    subtitle: 'エントリープラグ',
+    pass: 34, fail: 1, skip: 0,
+    trend: 'up',
+    lastRun: '14:28:03',
+    history: ['pass', 'fail', 'pass', 'pass', 'pass', 'pass', 'pass', 'pass', 'pass', 'pass'],
+  },
+  {
+    name: 'NERV NET',
+    subtitle: 'ネルフネット',
+    pass: 310, fail: 0, skip: 12,
+    trend: 'flat',
+    lastRun: '14:27:19',
+    history: ['pass', 'pass', 'pass', 'skip', 'pass', 'pass', 'pass', 'pass', 'skip', 'pass'],
+  },
+];
+
+function TestSuiteCell({ suite }: { suite: TestSuiteData }): React.JSX.Element {
+  const total = suite.pass + suite.fail + suite.skip;
+  const passRate = total > 0 ? (suite.pass / total) * 100 : 0;
+  const rateClass = passRate >= 95 ? 'good' : passRate >= 80 ? 'warn' : 'bad';
+  const trendSymbol = suite.trend === 'up' ? '▲' : suite.trend === 'down' ? '▼' : '─';
+
+  return (
+    <div className="eva-test-suite" role="group" aria-label={`${suite.name} test suite`}>
+      <div className="eva-test-suite__name">{suite.name}</div>
+      <div className="eva-test-suite__subtitle">{suite.subtitle}</div>
+
+      {/* Stacked bar */}
+      <div className="eva-test-suite__bar" role="img" aria-label={`${suite.pass} pass, ${suite.fail} fail, ${suite.skip} skip`}>
+        <div className="eva-test-suite__bar-pass" style={{ width: `${(suite.pass / total) * 100}%` }} />
+        <div className="eva-test-suite__bar-fail" style={{ width: `${(suite.fail / total) * 100}%` }} />
+        <div className="eva-test-suite__bar-skip" style={{ width: `${(suite.skip / total) * 100}%` }} />
+      </div>
+
+      {/* Counts legend */}
+      <div className="eva-test-suite__counts">
+        <span className="eva-test-suite__count-pass">✓{suite.pass}</span>
+        <span className="eva-test-suite__count-fail">✗{suite.fail}</span>
+        <span className="eva-test-suite__count-skip">⊘{suite.skip}</span>
+      </div>
+
+      {/* Pass rate + trend */}
+      <div className={`eva-test-suite__rate eva-test-suite__rate--${rateClass}`}>
+        {passRate.toFixed(1)}%
+        <span className={`eva-test-suite__trend-${suite.trend}`}> {trendSymbol}</span>
+      </div>
+
+      {/* Last run timestamp */}
+      <div className="eva-test-suite__time">{suite.lastRun}</div>
+
+      {/* Dot chart: last 10 runs */}
+      <div className="eva-test-suite__dots" role="img" aria-label={`Recent runs: ${suite.history.join(', ')}`}>
+        {suite.history.map((result, i) => (
+          <div key={i} className={`eva-test-suite__dot eva-test-suite__dot--${result}`} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Demo: Test suite cells with rich data — stacked bars, pass rates, trend arrows, and dot-chart history. */
+export const TestSuiteDashboard: Story = {
+  decorators: [(Story) => <div style={{ width: 960, height: 600, border: '1px solid var(--eva-border)' }}><Story /></div>],
+  render: (args) => {
+    const positions: Array<[number, number]> = [
+      [0, 0], [2, 0], [4, 0],
+      [1, 2], [3, 2], [5, 2],
+    ];
+    return (
+      <HexDashboard {...args} atmosphere>
+        {suites.map((suite, i) => {
+          const state = suite.fail > 5 ? 'warning' : suite.fail > 0 ? 'active' : 'active';
+          return (
+            <HexCell
+              key={suite.name}
+              col={positions[i]?.[0] ?? 0}
+              row={positions[i]?.[1] ?? 0}
+              size="lg"
+              state={state}
+            >
+              <TestSuiteCell suite={suite} />
+            </HexCell>
+          );
+        })}
+      </HexDashboard>
+    );
   },
 };
