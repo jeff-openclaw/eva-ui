@@ -123,6 +123,66 @@ export const WithZones: Story = {
   },
 };
 
+/** Dashboard with mixed-size cells: a large center panel and smaller status cells. */
+export const MixedSizes: Story = {
+  decorators: [(Story) => <div style={contained}><Story /></div>],
+  render: (args) => (
+    <HexDashboard {...args}>
+      {/* Large center panel */}
+      <HexCell col={3} row={2} size="lg" state="active">
+        <div style={{ color: 'var(--eva-text-gold)', fontFamily: 'var(--eva-font-mono)', textAlign: 'center' }}>
+          <div style={{ fontSize: '0.875rem', fontWeight: 700, letterSpacing: '0.05em' }}>MAIN MONITOR</div>
+          <div style={{ fontSize: '0.625rem', color: 'var(--eva-text-dim)', marginTop: 4 }}>Central Dogma</div>
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 8 }}>
+            <div>
+              <div style={{ fontSize: '0.875rem', color: 'var(--eva-text-gold)' }}>98.2%</div>
+              <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>SYNC</div>
+            </div>
+            <div>
+              <div style={{ fontSize: '0.875rem', color: 'var(--eva-text-gold)' }}>NOMINAL</div>
+              <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>STATUS</div>
+            </div>
+          </div>
+        </div>
+      </HexCell>
+      {/* Small status cells around the center */}
+      <HexCell col={0} row={0} size="sm" state="active">
+        <div style={{ color: 'var(--eva-text-gold)', fontFamily: 'var(--eva-font-mono)', fontSize: '0.5rem', textAlign: 'center' }}>
+          <div>01</div>
+        </div>
+      </HexCell>
+      <HexCell col={1} row={0} state="active">
+        <div style={{ color: 'var(--eva-text-gold)', fontFamily: 'var(--eva-font-mono)', fontSize: '0.625rem', textAlign: 'center' }}>
+          <div>MELCHIOR</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>メルキオール</div>
+        </div>
+      </HexCell>
+      <HexCell col={2} row={0} state="active">
+        <div style={{ color: 'var(--eva-text-gold)', fontFamily: 'var(--eva-font-mono)', fontSize: '0.625rem', textAlign: 'center' }}>
+          <div>BALTHASAR</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>バルタザール</div>
+        </div>
+      </HexCell>
+      <HexCell col={6} row={1} size="sm" state="warning" />
+      <HexCell col={7} row={1} size="sm">
+        <div style={{ color: 'var(--eva-text-dim)', fontFamily: 'var(--eva-font-mono)', fontSize: '0.5rem', textAlign: 'center' }}>
+          AUX
+        </div>
+      </HexCell>
+      <HexCell col={0} row={3}>
+        <div style={{ color: 'var(--eva-text-dim)', fontFamily: 'var(--eva-font-mono)', fontSize: '0.5rem', textAlign: 'center' }}>
+          LOG
+        </div>
+      </HexCell>
+      <HexCell col={7} row={3} state="active">
+        <div style={{ color: 'var(--eva-text-gold)', fontFamily: 'var(--eva-font-mono)', fontSize: '0.625rem', textAlign: 'center' }}>
+          CASPAR
+        </div>
+      </HexCell>
+    </HexDashboard>
+  ),
+};
+
 /** Dashboard with corridor effect on side zones. */
 export const CorridorEffect: Story = {
   decorators: [(Story) => <div style={contained}><Story /></div>],

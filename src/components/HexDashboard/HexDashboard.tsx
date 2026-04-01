@@ -7,6 +7,7 @@ import {
 } from './computeLayout';
 import { SQRT3 } from '../../utils/hexGeometry';
 import type { HexCellProps } from '../HexCell/HexCell';
+import { resolveHexCellSize } from '../HexCell/HexCell';
 import './HexDashboard.css';
 
 /** Named gap zones where chrome components mount. */
@@ -119,14 +120,19 @@ export function HexDashboard({
         + layout.cellWidth / 2;
       const cy = props.row * layout.vertSpacing + cellSize;
 
+      const sizeMultiplier = resolveHexCellSize(props.size);
       const colSpan = props.colSpan ?? 1;
       const rowSpan = props.rowSpan ?? 1;
-      const spanW = colSpan > 1
+
+      // Base span from colSpan/rowSpan, then scale by size multiplier
+      const baseW = colSpan > 1
         ? (colSpan - 1) * layout.horizSpacing + visualW
         : visualW;
-      const spanH = rowSpan > 1
+      const baseH = rowSpan > 1
         ? (rowSpan - 1) * layout.vertSpacing + visualH
         : visualH;
+      const spanW = baseW * sizeMultiplier;
+      const spanH = baseH * sizeMultiplier;
 
       return (
         <div

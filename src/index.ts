@@ -12,8 +12,8 @@ export type { HexDashboardProps, HexDashboardZones } from './components/HexDashb
 export { computeHexDashboardLayout, useHexDashboardLayout } from './components/HexDashboard';
 export type { HexDashboardLayout, HexDashboardLayoutConfig, GapDistribution, GapDistributionVertical } from './components/HexDashboard';
 
-export { HexCell } from './components/HexCell';
-export type { HexCellProps, HexCellState } from './components/HexCell';
+export { HexCell, resolveHexCellSize } from './components/HexCell';
+export type { HexCellProps, HexCellState, HexCellSize } from './components/HexCell';
 
 // ── Chrome ──
 export { HudHeader } from './components/HudHeader';
