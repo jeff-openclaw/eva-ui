@@ -9,6 +9,12 @@
       rgba(0, 0, 0, 0.75) 100%
     );
     backdrop-filter: blur(1px);
+    animation: hud-drawer-backdrop-dim 250ms ease-out both;
+  }
+
+  @keyframes hud-drawer-backdrop-dim {
+    from { opacity: 0; }
+    to   { opacity: 1; }
   }
 
   .eva-hud-drawer {
@@ -86,8 +92,13 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .eva-hud-drawer {
+    .eva-hud-drawer,
+    .eva-hud-drawer__backdrop {
       animation: none !important;
+    }
+
+    .eva-hud-drawer__backdrop {
+      backdrop-filter: none;
     }
   }
 }

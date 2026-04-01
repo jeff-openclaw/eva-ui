@@ -1,2 +1,22 @@
 === Task: HudModal + HudDrawer depth: Modals should feel like they're floating forward on a separate plane. Add layered box-shadows for depth (not just one shadow), a subtle border glow, and make the backdrop feel like the display dimming behind. The double-border effect from the spec (gold, gap, gold) needs to actually look premium. ===
 === Started: Wed Apr  1 08:09:32 PM UTC 2026 ===
+All changes are clean. Here's a summary of what was found and fixed:
+
+### HudModal
+
+| Issue | Fix |
+|-------|-----|
+| **Backdrop used `hud-arrive-center` animation** (scale + translateZ) — wrong for a fullscreen overlay, caused it to visually shrink-in instead of dimming | Replaced with `hud-modal-backdrop-dim` (opacity-only fade) |
+| **Missing `eva-hud-chrome--modal` class** on the dialog element — modal never got the `translateZ(48px)` depth transform from the shared chrome styles | Added the class in `HudModal.tsx:100` |
+| **`backdrop-filter: blur()` not disabled for reduced-motion** — blur is a visual effect that can cause discomfort | Added `backdrop-filter: none` in the reduced-motion media query |
+
+### HudDrawer
+
+| Issue | Fix |
+|-------|-----|
+| **Backdrop had no entrance animation** — appeared instantly, jarring vs. the drawer sliding in | Added `hud-drawer-backdrop-dim` opacity fade (250ms) |
+| **`backdrop-filter: blur()` not disabled for reduced-motion** | Added `backdrop-filter: none` in reduced-motion query |
+| **Backdrop reduced-motion not covered** — only `.eva-hud-drawer` had `animation: none`, backdrop was missed | Added `.eva-hud-drawer__backdrop` to the reduced-motion rule |
+
+The layered box-shadows, gold border glow, radial gradient backdrops, and gradient backgrounds were already in place (applied by a formatting hook). My fixes addressed the animation bugs, missing depth class, and accessibility gaps.
+=== Finished: Wed Apr  1 08:12:03 PM UTC 2026 === Exit: 0 ===
