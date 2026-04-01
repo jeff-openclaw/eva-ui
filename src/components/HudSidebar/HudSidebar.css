@@ -25,8 +25,8 @@
       inset 0 0 40px rgba(0, 0, 0, 0.2),
       /* gold bloom on right border */
       1px 0 0 var(--eva-gold),
-      2px 0 8px rgba(204, 136, 0, 0.25),
-      4px 0 16px rgba(204, 136, 0, 0.12);
+      2px 0 8px rgba(var(--eva-glow-rgb), calc(0.25 * var(--eva-glow-intensity))),
+      4px 0 16px rgba(var(--eva-glow-rgb), calc(0.12 * var(--eva-glow-intensity)));
   }
 
   .eva-hud-sidebar--right {
@@ -36,8 +36,8 @@
       inset 0 0 40px rgba(0, 0, 0, 0.2),
       /* gold bloom on left border */
       -1px 0 0 var(--eva-gold),
-      -2px 0 8px rgba(204, 136, 0, 0.25),
-      -4px 0 16px rgba(204, 136, 0, 0.12);
+      -2px 0 8px rgba(var(--eva-glow-rgb), calc(0.25 * var(--eva-glow-intensity))),
+      -4px 0 16px rgba(var(--eva-glow-rgb), calc(0.12 * var(--eva-glow-intensity)));
   }
 
   /* ── Hazard accent ── */

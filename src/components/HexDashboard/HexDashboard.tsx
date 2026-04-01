@@ -46,6 +46,12 @@ export interface HexDashboardProps {
   corridorPerspective?: number;
   /** Corridor rotation angle in degrees. @default 4 */
   corridorAngle?: number;
+  /**
+   * Enable atmospheric background hex styling — faint inner glow, etched-glass
+   * borders, and subtle random ambient flicker on background hexes.
+   * @default false
+   */
+  atmosphere?: boolean;
   /** CSS class. */
   className?: string;
   /** HexCell children. */
@@ -67,6 +73,7 @@ export function HexDashboard({
   gapDistribution = 'auto',
   gapDistributionVertical = 'auto',
   zones,
+  atmosphere = false,
   corridorEffect = false,
   corridorPerspective = 1200,
   corridorAngle = 4,
@@ -208,6 +215,19 @@ export function HexDashboard({
     return suppressed;
   }, [children, layout, effectiveSize]);
 
+  // Atmosphere: stable random delays per hex (seeded by col,row)
+  const atmosphereDelays = useMemo(() => {
+    if (!atmosphere || !layout) return null;
+    const delays = new Map<string, number>();
+    for (let row = 0; row < layout.rows; row++) {
+      for (let col = 0; col < layout.cols; col++) {
+        // Simple hash for stable pseudo-random delay
+        delays.set(`${col},${row}`, ((col * 7 + row * 13) % 17) * 0.6);
+      }
+    }
+    return delays;
+  }, [atmosphere, layout]);
+
   // Background SVG
   const svgWidth = layout ? layout.gridWidth : 0;
   const svgHeight = layout ? layout.gridHeight : 0;
@@ -215,7 +235,7 @@ export function HexDashboard({
   return (
     <div
       ref={containerRef}
-      className={`eva-hex-dashboard${className ? ` ${className}` : ''}`}
+      className={`eva-hex-dashboard${atmosphere ? ' eva-hex-dashboard--atmosphere' : ''}${className ? ` ${className}` : ''}`}
       style={dashboardStyle}
     >
       {layout && (
@@ -229,6 +249,14 @@ export function HexDashboard({
               height={svgHeight}
               viewBox={`0 0 ${svgWidth} ${svgHeight}`}
             >
+              {atmosphere && (
+                <defs>
+                  <filter id="eva-atmosphere-glow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
+                    <feComposite in="blur" in2="SourceGraphic" operator="atop" />
+                  </filter>
+                </defs>
+              )}
               {Array.from({ length: layout.rows }, (_, row) =>
                 Array.from({ length: layout.cols }, (_, col) => {
                   // Skip background hexes covered by large cells
@@ -247,10 +275,14 @@ export function HexDashboard({
                   return (
                     <polygon
                       key={`${col},${row}`}
+                      className={atmosphere ? 'eva-hex-dashboard__bg-hex--atmosphere' : undefined}
                       points={corners.join(' ')}
                       fill="var(--eva-hex-fill)"
-                      stroke="var(--eva-border)"
-                      strokeWidth={1}
+                      stroke={atmosphere ? 'var(--eva-hex-atmosphere-border)' : 'var(--eva-border)'}
+                      strokeWidth={atmosphere ? 0.5 : 1}
+                      style={atmosphere && atmosphereDelays ? {
+                        animationDelay: `${atmosphereDelays.get(`${col},${row}`) ?? 0}s`,
+                      } : undefined}
                     />
                   );
                 })

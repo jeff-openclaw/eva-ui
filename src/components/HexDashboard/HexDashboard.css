@@ -97,7 +97,45 @@
     transform-origin: left center;
   }
 
+  /* ── Atmosphere Effect ── */
+
+  .eva-hex-dashboard--atmosphere {
+    --eva-hex-atmosphere-border: rgba(204, 17, 17, 0.12);
+  }
+
+  .eva-hex-dashboard__bg-hex--atmosphere {
+    filter: url(#eva-atmosphere-glow);
+    animation: hex-atmosphere-flicker 8s ease-in-out infinite;
+  }
+
+  @keyframes hex-atmosphere-flicker {
+    0%, 100% {
+      opacity: 1;
+      fill-opacity: 1;
+    }
+    20% {
+      opacity: 0.85;
+      fill-opacity: 0.7;
+    }
+    40% {
+      opacity: 1;
+      fill-opacity: 1;
+    }
+    60% {
+      opacity: 0.9;
+      fill-opacity: 0.8;
+    }
+    80% {
+      opacity: 0.95;
+      fill-opacity: 0.9;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
+    .eva-hex-dashboard__bg-hex--atmosphere {
+      animation: none;
+    }
+
     .eva-hex-dashboard__zone--corridor-left,
     .eva-hex-dashboard__zone--corridor-right {
       transform: none;

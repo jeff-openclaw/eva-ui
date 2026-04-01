@@ -1,0 +1,38 @@
+=== Task: Global HUD atmosphere: Add a shared `.eva-hud-glow` utility class that adds the signature glow treatment. Ensure all chrome components use consistent glow/shadow tokens. Add CSS custom properties for glow intensity so consumers can tune it. The overall feel should be: dark void background, elements floating forward with backlit edges, CRT scan artifacts, like you're looking at a real tactical display. ===
+=== Started: Wed Apr  1 08:27:27 PM UTC 2026 ===
+Clean type-check. Here's what was done:
+
+## Changes Summary
+
+### New: glow tuning tokens (`tokens.css`)
+- **`--eva-glow-rgb`**: Raw RGB channels (`204, 136, 0` default) — theme-aware, overridden in Seele (blue) and Wille (green) variants
+- **`--eva-glow-intensity`**: Multiplier (default `1`) — consumers set `0.5` for subdued, `1.5` for hot
+- **`--eva-glow-depth-opacity`**: Controls depth shadow darkness (default `0.7`)
+
+### New: `.eva-hud-glow` utility class (`hud-chrome.css`)
+Signature backlit-edge treatment with 5 shadow layers: inner backlit edge, border glow, near bloom, mid bloom, and depth shadow. All driven by the tuning tokens. Drop it on any element to get the tactical display look.
+
+### Consistency fixes — all chrome components now use tokens
+Replaced hardcoded `rgba(204, 136, 0, ...)` glow values with `rgba(var(--eva-glow-rgb), calc(... * var(--eva-glow-intensity)))` in:
+- **`hud-chrome.css`** — base `.eva-hud-chrome` shadow
+- **`HudHeader.css`** — top lit edge, gold bloom, depth shadow
+- **`HudSidebar.css`** — directional bloom (left/right variants)
+- **`HudModal.css`** — double-border glow, header glow, depth layers
+- **`HudDrawer.css`** — all 4 directional variants (left/right/top/bottom)
+- **`HudAlert.css`** — info severity glow
+
+### Bug fix: HudTooltip had no glow
+`HudTooltip.css` only had a plain dark drop shadow (`0 4px 12px rgba(0,0,0,0.8)`) — the only chrome component with zero glow treatment. Added subtle inner backlit edge + near bloom to match the family, while keeping it restrained (tooltips should be lightweight).
+
+### What consumers can now do
+```css
+/* Subdued glow for a quieter UI */
+.my-app { --eva-glow-intensity: 0.5; }
+
+/* Hot tactical display */
+.my-app { --eva-glow-intensity: 1.8; }
+
+/* Per-element override */
+.my-widget { --eva-glow-intensity: 0; } /* kill glow entirely */
+```
+=== Finished: Wed Apr  1 08:31:15 PM UTC 2026 === Exit: 0 ===

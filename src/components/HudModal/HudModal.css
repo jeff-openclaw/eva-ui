@@ -33,19 +33,19 @@
     border: 1px solid var(--eva-gold);
     box-shadow:
       /* Double-border: inner gold */
-      inset 0 0 0 1px rgba(204, 136, 0, 0.15),
+      inset 0 0 0 1px rgba(var(--eva-glow-rgb), calc(0.15 * var(--eva-glow-intensity))),
       /* Inner depth shadow */
       inset 0 2px 12px rgba(0, 0, 0, 0.6),
       /* Gold border glow (bloom) */
-      0 0 6px rgba(204, 136, 0, 0.25),
-      0 0 20px rgba(204, 136, 0, 0.10),
+      0 0 6px rgba(var(--eva-glow-rgb), calc(0.25 * var(--eva-glow-intensity))),
+      0 0 20px rgba(var(--eva-glow-rgb), calc(0.10 * var(--eva-glow-intensity))),
       /* Double-border: outer gold with gap */
       0 0 0 3px var(--eva-void),
-      0 0 0 4px rgba(204, 136, 0, 0.7),
+      0 0 0 4px rgba(var(--eva-glow-rgb), calc(0.7 * var(--eva-glow-intensity))),
       /* Outer bloom on the second border */
-      0 0 12px 4px rgba(204, 136, 0, 0.08),
+      0 0 12px 4px rgba(var(--eva-glow-rgb), calc(0.08 * var(--eva-glow-intensity))),
       /* Depth shadow layers */
-      0 8px 24px rgba(0, 0, 0, 0.7),
+      0 8px 24px rgba(0, 0, 0, var(--eva-glow-depth-opacity)),
       0 24px 64px rgba(0, 0, 0, 0.95);
     overflow: hidden;
   }
@@ -62,7 +62,7 @@
       transparent 100%
     );
     border-bottom: 1px solid var(--eva-gold);
-    box-shadow: 0 1px 8px rgba(204, 136, 0, 0.08);
+    box-shadow: 0 1px 8px rgba(var(--eva-glow-rgb), calc(0.08 * var(--eva-glow-intensity)));
   }
 
   .eva-hud-modal__title {

@@ -1,0 +1,2 @@
+=== Task: HexDashboard grid atmosphere: The background hex grid should feel more atmospheric — cells should have a very faint inner glow, borders should be barely visible but present (like etched glass). Add an optional `atmosphere` prop that enables subtle ambient animation on background hexes (random faint flickers). The grid should feel alive, not static. ===
+=== Started: Wed Apr  1 08:38:54 PM UTC 2026 ===

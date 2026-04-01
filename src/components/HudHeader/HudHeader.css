@@ -13,15 +13,15 @@
     animation: hud-arrive-top 250ms ease-out both;
     box-shadow:
       /* inner depth — top lit, bottom darkened */
-      inset 0 1px 0 rgba(204, 136, 0, 0.12),
+      inset 0 1px 0 rgba(var(--eva-glow-rgb), calc(0.12 * var(--eva-glow-intensity))),
       inset 0 -4px 12px rgba(0, 0, 0, 0.6),
       inset 0 0 20px rgba(0, 0, 0, 0.4),
       /* gold bloom on bottom border */
       0 1px 0 var(--eva-gold),
-      0 2px 8px rgba(204, 136, 0, 0.25),
-      0 4px 16px rgba(204, 136, 0, 0.12),
+      0 2px 8px rgba(var(--eva-glow-rgb), calc(0.25 * var(--eva-glow-intensity))),
+      0 4px 16px rgba(var(--eva-glow-rgb), calc(0.12 * var(--eva-glow-intensity))),
       /* projected-forward depth shadow */
-      0 8px 32px rgba(0, 0, 0, 0.7);
+      0 8px 32px rgba(0, 0, 0, var(--eva-glow-depth-opacity));
     /* hold the forward-Z position after arrival animation completes */
     transform: perspective(var(--eva-perspective, 1200px)) translateZ(24px);
   }

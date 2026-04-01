@@ -183,6 +183,38 @@ export const MixedSizes: Story = {
   ),
 };
 
+/** Dashboard with atmospheric background — faint glow, etched borders, ambient flicker. */
+export const Atmosphere: Story = {
+  decorators: [(Story) => <div style={contained}><Story /></div>],
+  args: {
+    atmosphere: true,
+  },
+};
+
+/** Atmosphere with cells — shows the living grid behind content cells. */
+export const AtmosphereWithCells: Story = {
+  decorators: [(Story) => <div style={contained}><Story /></div>],
+  render: (args) => (
+    <HexDashboard {...args} atmosphere>
+      <HexCell col={1} row={1} state="active">
+        <div style={{ color: 'var(--eva-text-gold)', fontFamily: 'var(--eva-font-mono)', fontSize: '0.625rem', textAlign: 'center' }}>
+          <div>MELCHIOR</div>
+        </div>
+      </HexCell>
+      <HexCell col={3} row={1} state="active">
+        <div style={{ color: 'var(--eva-text-gold)', fontFamily: 'var(--eva-font-mono)', fontSize: '0.625rem', textAlign: 'center' }}>
+          <div>BALTHASAR</div>
+        </div>
+      </HexCell>
+      <HexCell col={5} row={1} state="active">
+        <div style={{ color: 'var(--eva-text-gold)', fontFamily: 'var(--eva-font-mono)', fontSize: '0.625rem', textAlign: 'center' }}>
+          <div>CASPAR</div>
+        </div>
+      </HexCell>
+    </HexDashboard>
+  ),
+};
+
 /** Dashboard with corridor effect on side zones. */
 export const CorridorEffect: Story = {
   decorators: [(Story) => <div style={contained}><Story /></div>],

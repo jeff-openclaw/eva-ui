@@ -34,6 +34,11 @@
     --eva-glow-gold: 0 0 8px rgba(204, 136, 0, 0.3);
     --eva-chrome-shadow: 0 16px 48px rgba(0, 0, 0, 0.9);
 
+    /* ── Glow tuning — consumers override these to adjust intensity ── */
+    --eva-glow-rgb: 204, 136, 0;
+    --eva-glow-intensity: 1;
+    --eva-glow-depth-opacity: 0.7;
+
     /* ── Font Families ── */
     --eva-font-mono: 'Share Tech Mono', 'Courier New', monospace;
     --eva-font-ui: 'Rajdhani', 'Arial Narrow', sans-serif;
@@ -94,6 +99,10 @@
   }
 
   /* SEELE — cooler, bluer tone */
+  .eva-theme--seele .eva-hex-dashboard--atmosphere {
+    --eva-hex-atmosphere-border: rgba(17, 68, 204, 0.12);
+  }
+
   .eva-theme--seele {
     --eva-crimson: #1144cc;
     --eva-warning: #2266ff;
@@ -103,9 +112,14 @@
     --eva-hex-fill: rgba(17, 68, 204, 0.10);
     --eva-hex-active: rgba(17, 68, 204, 0.25);
     --eva-glow: 0 0 8px rgba(34, 102, 255, 0.4);
+    --eva-glow-rgb: 34, 102, 255;
   }
 
   /* WILLE — greenish resistance tone */
+  .eva-theme--wille .eva-hex-dashboard--atmosphere {
+    --eva-hex-atmosphere-border: rgba(17, 204, 68, 0.12);
+  }
+
   .eva-theme--wille {
     --eva-crimson: #11cc44;
     --eva-warning: #22ff44;
@@ -115,5 +129,6 @@
     --eva-hex-fill: rgba(17, 204, 68, 0.10);
     --eva-hex-active: rgba(17, 204, 68, 0.25);
     --eva-glow: 0 0 8px rgba(34, 255, 68, 0.4);
+    --eva-glow-rgb: 34, 255, 68;
   }
 }
