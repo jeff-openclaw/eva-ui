@@ -25,17 +25,23 @@ export interface CountdownTimerProps {
   className?: string;
 }
 
-function formatTime(s: number, fmt: 'mm:ss' | 'hh:mm:ss'): string {
+/** Returns time segments as an array of digit groups (e.g. ['05','30'] or ['01','05','30']). */
+function getSegments(s: number, fmt: 'mm:ss' | 'hh:mm:ss'): string[] {
   const totalSec = Math.max(0, Math.floor(s));
   if (fmt === 'hh:mm:ss') {
     const h = Math.floor(totalSec / 3600);
     const m = Math.floor((totalSec % 3600) / 60);
     const sec = totalSec % 60;
-    return `${String(h).padStart(2, '0')} : ${String(m).padStart(2, '0')} : ${String(sec).padStart(2, '0')}`;
+    return [String(h).padStart(2, '0'), String(m).padStart(2, '0'), String(sec).padStart(2, '0')];
   }
   const m = Math.floor(totalSec / 60);
   const sec = totalSec % 60;
-  return `${String(m).padStart(2, '0')} : ${String(sec).padStart(2, '0')}`;
+  return [String(m).padStart(2, '0'), String(sec).padStart(2, '0')];
+}
+
+/** Formats time as a flat string for aria-label. */
+function formatTime(s: number, fmt: 'mm:ss' | 'hh:mm:ss'): string {
+  return getSegments(s, fmt).join(' : ');
 }
 
 /**
@@ -107,7 +113,14 @@ export function CountdownTimer({
     >
       <div className="eva-countdown__label">{label}</div>
       <div className="eva-countdown__label-sub">{labelSub}</div>
-      <div className="eva-countdown__time">{formatTime(remaining, format)}</div>
+      <div className="eva-countdown__time">
+        {getSegments(remaining, format).map((seg, i) => (
+          <span key={i}>
+            {i > 0 && <span className="eva-countdown__colon" aria-hidden="true"> : </span>}
+            <span className="eva-countdown__digits">{seg}</span>
+          </span>
+        ))}
+      </div>
       {state === 'expired' && (
         <div className="eva-countdown__expired-label">活動限界</div>
       )}

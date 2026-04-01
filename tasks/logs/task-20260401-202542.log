@@ -1,0 +1,23 @@
+=== Task: CountdownTimer urgency: Normal state should have calm gold numerals with a subtle backlight. Warning state should add an amber glow that intensifies. Critical should have aggressive red glow, slight text shake/jitter, and the colon should blink. Expired should flash dramatically then settle. ===
+=== Started: Wed Apr  1 08:25:42 PM UTC 2026 ===
+Type check passes, everything looks good. Here's what I found and fixed:
+
+### Changes
+
+**TSX (`CountdownTimer.tsx`)**
+- Split `formatTime` into `getSegments` (returns array of digit groups) + `formatTime` (joins for aria-label)
+- Rendered time as separate `<span className="eva-countdown__digits">` and `<span className="eva-countdown__colon">` elements so colons can be targeted independently with CSS
+- Colons are `aria-hidden="true"` since the full time string is in `aria-label`
+
+**CSS (`CountdownTimer.css`)**
+
+| State | Before | After |
+|-------|--------|-------|
+| **Normal** | Gold color only | Gold color + subtle dual-layer `text-shadow` backlight glow |
+| **Warning** | Red pulse (`#ff2200`) | Amber pulse using `--eva-stripe` (`#ffaa00`), amber `text-shadow` glow |
+| **Critical** | `berserk-text` color cycle only | Red `text-shadow` glow, `countdown-jitter` shake (0.3px translate steps), `countdown-colon-blink` (0.6s step blink) |
+| **Expired** | Static red background | `countdown-expire-flash` — 1.2s flash sequence (bright → dim → bright → settle) with `forwards` fill |
+
+- Added 3 new keyframes: `countdown-jitter`, `countdown-colon-blink`, `countdown-expire-flash`
+- Updated `prefers-reduced-motion` to cover all new animations including colon blink and expired flash, with a static fallback background for expired state
+=== Finished: Wed Apr  1 08:27:15 PM UTC 2026 === Exit: 0 ===
