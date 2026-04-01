@@ -29,6 +29,9 @@
     overflow: hidden;
     font-family: var(--eva-font-mono, monospace);
     color: var(--eva-text, #ccc);
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
   }
 
   /* ── Size presets ── */

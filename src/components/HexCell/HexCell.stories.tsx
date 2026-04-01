@@ -142,6 +142,39 @@ export const WithRichContent: Story = {
   ],
 };
 
+/** Demonstrates text wrapping and overflow handling with long content. */
+export const TextOverflow: Story = {
+  decorators: [
+    () => (
+      <div style={{ padding: 48, display: 'flex', gap: 24, alignItems: 'center' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ width: 76, height: 88, position: 'relative' }}>
+            <HexCell col={0} row={0} state="active">
+              <span style={{ fontSize: '0.5rem' }}>SUPERLONGSTATUSTEXT</span>
+            </HexCell>
+          </div>
+          <div style={{ color: 'var(--eva-text-dim)', fontSize: '0.625rem', marginTop: 8, fontFamily: 'var(--eva-font-mono)' }}>
+            md — long word
+          </div>
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ width: 152, height: 176, position: 'relative' }}>
+            <HexCell col={0} row={0} size="lg" state="active">
+              <div style={{ color: 'var(--eva-text-gold)', fontSize: '0.75rem' }}>DIAGNOSTICS</div>
+              <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)', marginTop: 4 }}>
+                Pattern blue confirmed. All monitoring stations report nominal readings across sectors 1 through 7.
+              </div>
+            </HexCell>
+          </div>
+          <div style={{ color: 'var(--eva-text-dim)', fontSize: '0.625rem', marginTop: 8, fontFamily: 'var(--eva-font-mono)' }}>
+            lg — paragraph
+          </div>
+        </div>
+      </div>
+    ),
+  ],
+};
+
 export const AllStates: Story = {
   decorators: [
     () => (

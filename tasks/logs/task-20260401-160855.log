@@ -1,0 +1,2 @@
+=== Task: PRIORITY: HexCell content adaptation — HexCells should be able to contain arbitrary React content and display it properly. Content should be centered within the hex shape, text should wrap or scale, and cells should gracefully handle overflow. Add a `size` prop or similar that lets cells be 'sm' | 'md' | 'lg' | 'xl' or accept a custom size multiplier. Larger cells should occupy more space in the grid. Update stories to demonstrate cells with real content (text, stats, charts placeholder). ===
+=== Started: Wed Apr  1 04:08:55 PM UTC 2026 ===
