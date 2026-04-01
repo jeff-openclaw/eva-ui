@@ -63,4 +63,11 @@
     justify-content: flex-end;
     gap: var(--eva-space-2);
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .eva-hud-modal__backdrop,
+    .eva-hud-modal {
+      animation: none !important;
+    }
+  }
 }

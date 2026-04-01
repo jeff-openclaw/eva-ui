@@ -1,0 +1,2 @@
+=== Task: Review HudModal + HudDrawer: focus trap correctness, escape key handling, backdrop behavior, scroll lock, animation cleanup on unmount ===
+=== Started: Wed Apr  1 01:38:55 PM UTC 2026 ===

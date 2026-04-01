@@ -54,4 +54,10 @@
     border-left: none;
     border-right: none;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .eva-hud-drawer {
+      animation: none !important;
+    }
+  }
 }

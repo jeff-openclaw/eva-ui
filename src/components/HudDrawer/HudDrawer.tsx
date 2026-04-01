@@ -48,7 +48,15 @@ export function HudDrawer({
   useEffect(() => {
     if (!open) return;
     document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
+
+    // Lock body scroll
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = prev;
+    };
   }, [open, handleEscape]);
 
   if (!open) return null;
@@ -63,6 +71,8 @@ export function HudDrawer({
       )}
       <div
         className={`eva-hud-chrome eva-hud-chrome--floating eva-hud-drawer eva-hud-drawer--${position}${className ? ` ${className}` : ''}`}
+        role="dialog"
+        aria-modal={backdrop}
         style={{
           [isHorizontal ? 'width' : 'height']: sizeValue,
           animationName: animationMap[position],

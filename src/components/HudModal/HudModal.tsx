@@ -45,20 +45,23 @@ export function HudModal({
   const modalRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
-  // Focus trap
+  // Focus trap + scroll lock
   useEffect(() => {
     if (!open) return;
     previousFocusRef.current = document.activeElement as HTMLElement;
     const timer = setTimeout(() => modalRef.current?.focus(), 50);
-    return () => clearTimeout(timer);
-  }, [open]);
 
-  // Restore focus on close
-  useEffect(() => {
-    if (!open && previousFocusRef.current) {
-      previousFocusRef.current.focus();
+    // Lock body scroll
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      clearTimeout(timer);
+      document.body.style.overflow = prev;
+      // Restore focus on close
+      previousFocusRef.current?.focus();
       previousFocusRef.current = null;
-    }
+    };
   }, [open]);
 
   // Escape key
