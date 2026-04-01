@@ -1,0 +1,165 @@
+@layer eva-ui {
+  /* ── Activity Feed Cell ── */
+  .eva-activity-feed {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    font-family: var(--eva-font-mono);
+    overflow: hidden;
+  }
+
+  .eva-activity-feed__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0 2px 4px;
+    border-bottom: 1px solid rgba(255, 200, 0, 0.15);
+    margin-bottom: 4px;
+    flex-shrink: 0;
+  }
+
+  .eva-activity-feed__title {
+    font-size: 0.5625rem;
+    font-weight: var(--eva-weight-bold);
+    color: var(--eva-text-gold);
+    letter-spacing: var(--eva-tracking-wide);
+    text-transform: uppercase;
+  }
+
+  .eva-activity-feed__title-ja {
+    font-size: 0.4375rem;
+    font-family: var(--eva-font-ja);
+    color: var(--eva-text-dim);
+  }
+
+  .eva-activity-feed__live {
+    font-size: 0.4375rem;
+    color: #22cc44;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .eva-activity-feed__live-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #22cc44;
+    box-shadow: 0 0 4px rgba(34, 204, 68, 0.6);
+    animation: eva-activity-feed-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes eva-activity-feed-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* ── Scrolling log area ── */
+  .eva-activity-feed__log {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 200, 0, 0.2) transparent;
+    mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 94%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 94%, transparent 100%);
+  }
+
+  /* ── Individual log entry ── */
+  .eva-activity-feed__entry {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    padding: 1px 2px;
+    font-size: 0.4375rem;
+    line-height: 1.4;
+    animation: eva-activity-feed-entry-in 0.3s ease-out;
+  }
+
+  @keyframes eva-activity-feed-entry-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .eva-activity-feed__timestamp {
+    color: var(--eva-text-dim);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  /* ── Result badges ── */
+  .eva-activity-feed__badge {
+    flex-shrink: 0;
+    padding: 0 3px;
+    border-radius: 1px;
+    font-size: 0.375rem;
+    font-weight: var(--eva-weight-bold);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .eva-activity-feed__badge--pass {
+    color: #22cc44;
+    background: rgba(34, 204, 68, 0.1);
+    border: 1px solid rgba(34, 204, 68, 0.25);
+  }
+
+  .eva-activity-feed__badge--fail {
+    color: var(--eva-crimson);
+    background: rgba(204, 17, 17, 0.1);
+    border: 1px solid rgba(204, 17, 17, 0.25);
+  }
+
+  .eva-activity-feed__badge--skip {
+    color: var(--eva-gold);
+    opacity: 0.7;
+    background: rgba(255, 200, 0, 0.06);
+    border: 1px solid rgba(255, 200, 0, 0.15);
+  }
+
+  .eva-activity-feed__badge--info {
+    color: var(--eva-text-dim);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .eva-activity-feed__badge--run {
+    color: #44aaff;
+    background: rgba(68, 170, 255, 0.08);
+    border: 1px solid rgba(68, 170, 255, 0.2);
+  }
+
+  .eva-activity-feed__message {
+    color: var(--eva-text-dim);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .eva-activity-feed__suite {
+    color: var(--eva-text-gold);
+    flex-shrink: 0;
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .eva-activity-feed__live-dot {
+      animation: none;
+    }
+
+    .eva-activity-feed__entry {
+      animation: none;
+    }
+  }
+}

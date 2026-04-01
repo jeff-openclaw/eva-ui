@@ -8,6 +8,7 @@ import type { MagiVote } from '../MagiPanel';
 import './TestSuiteDemo.css';
 import './MetricDemo.css';
 import './MagiVotingDemo.css';
+import './ActivityFeedDemo.css';
 
 const fullscreen: React.CSSProperties = {
   width: '100vw',
@@ -605,6 +606,175 @@ export const MagiVoting: Story = {
             showJapanese
             pulse
           />
+        </div>
+      </HexCell>
+    </HexDashboard>
+  ),
+};
+
+/* ── Activity Feed Demo ── */
+
+type EventResult = 'pass' | 'fail' | 'skip' | 'info' | 'run';
+
+interface ActivityEvent {
+  time: string;
+  result: EventResult;
+  suite: string;
+  message: string;
+}
+
+const activitySeed: ActivityEvent[] = [
+  { time: '14:32:07', result: 'pass', suite: 'AUTH', message: 'login_flow — 142 assertions passed' },
+  { time: '14:32:06', result: 'pass', suite: 'AUTH', message: 'token_refresh — JWT rotation OK' },
+  { time: '14:32:04', result: 'fail', suite: 'SYNC', message: 'websocket_reconnect — timeout after 5000ms' },
+  { time: '14:31:58', result: 'pass', suite: 'MAGI', message: 'consensus_vote — 3/3 systems nominal' },
+  { time: '14:31:52', result: 'run', suite: 'SYNC', message: 'starting suite run (92 tests)' },
+  { time: '14:31:50', result: 'skip', suite: 'AT FIELD', message: 'barrier_stress — skipped (flaky)' },
+  { time: '14:31:47', result: 'fail', suite: 'AT FIELD', message: 'field_inversion — expected 142kPa got 0' },
+  { time: '14:31:44', result: 'pass', suite: 'ENTRY', message: 'plug_eject — nominal in 230ms' },
+  { time: '14:31:40', result: 'info', suite: 'SYSTEM', message: 'gc pause 12ms — heap 84MB' },
+  { time: '14:31:38', result: 'pass', suite: 'NERV', message: 'network_handshake — 310 endpoints OK' },
+  { time: '14:31:35', result: 'pass', suite: 'AUTH', message: 'oauth_callback — redirect chain valid' },
+  { time: '14:31:33', result: 'fail', suite: 'SYNC', message: 'state_merge — conflict resolution failed' },
+  { time: '14:31:30', result: 'pass', suite: 'MAGI', message: 'io_throughput — 2.4GB/s within budget' },
+  { time: '14:31:27', result: 'info', suite: 'SYSTEM', message: 'worker pool scaled to 8 threads' },
+  { time: '14:31:24', result: 'pass', suite: 'ENTRY', message: 'lcl_fill — purity 99.97%' },
+  { time: '14:31:20', result: 'run', suite: 'AUTH', message: 'starting suite run (145 tests)' },
+  { time: '14:31:18', result: 'pass', suite: 'NERV', message: 'cert_rotation — all nodes renewed' },
+  { time: '14:31:15', result: 'skip', suite: 'SYNC', message: 'p2p_discovery — skipped (env missing)' },
+  { time: '14:31:12', result: 'fail', suite: 'AT FIELD', message: 'resonance_cascade — amplitude overflow' },
+  { time: '14:31:09', result: 'pass', suite: 'MAGI', message: 'voting_quorum — 2/3 majority confirmed' },
+];
+
+const newEventTemplates: Array<Omit<ActivityEvent, 'time'>> = [
+  { result: 'pass', suite: 'AUTH', message: 'session_validate — cookie chain intact' },
+  { result: 'pass', suite: 'SYNC', message: 'delta_merge — 14 records reconciled' },
+  { result: 'fail', suite: 'AT FIELD', message: 'harmonics_test — frequency drift detected' },
+  { result: 'pass', suite: 'MAGI', message: 'pattern_blue — classification confirmed' },
+  { result: 'info', suite: 'SYSTEM', message: 'checkpoint saved — snapshot 0x4A2F' },
+  { result: 'pass', suite: 'NERV', message: 'uplink_latency — 4ms avg (< 10ms SLA)' },
+  { result: 'pass', suite: 'ENTRY', message: 'neural_link — sync rate 98.2%' },
+  { result: 'skip', suite: 'SYNC', message: 'offline_queue — skipped (queue empty)' },
+  { result: 'fail', suite: 'SYNC', message: 'raft_election — split brain detected' },
+  { result: 'run', suite: 'AT FIELD', message: 'starting suite run (76 tests)' },
+  { result: 'pass', suite: 'AUTH', message: 'mfa_verify — TOTP valid' },
+  { result: 'pass', suite: 'MAGI', message: 'self_diagnostic — all cores nominal' },
+];
+
+function formatTime(date: Date): string {
+  return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+
+const badgeLabels: Record<EventResult, string> = {
+  pass: 'PASS',
+  fail: 'FAIL',
+  skip: 'SKIP',
+  info: 'INFO',
+  run: 'RUN',
+};
+
+/**
+ * ActivityFeedCell — scrolling live feed of test events.
+ * Adds a new random event every 2–4 seconds and auto-scrolls to the bottom.
+ */
+function ActivityFeedCell(): React.JSX.Element {
+  const [events, setEvents] = useState<ActivityEvent[]>(activitySeed);
+
+  const setLogRef = useCallback((node: HTMLDivElement | null) => {
+    if (node) {
+      node.scrollTop = node.scrollHeight;
+    }
+  }, []);
+
+  useEffect(() => {
+    const el = document.querySelector('.eva-activity-feed__log');
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) return;
+
+    let templateIdx = 0;
+    const interval = setInterval(() => {
+      const template = newEventTemplates[templateIdx % newEventTemplates.length];
+      if (!template) return;
+      templateIdx++;
+      const newEvent: ActivityEvent = {
+        ...template,
+        time: formatTime(new Date()),
+      };
+      setEvents(prev => [...prev, newEvent]);
+
+      // Auto-scroll after state update
+      requestAnimationFrame(() => {
+        if (el) {
+          el.scrollTop = el.scrollHeight;
+        }
+      });
+    }, 2500 + Math.random() * 1500);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="eva-activity-feed" role="log" aria-label="Activity feed" aria-live="polite">
+      <div className="eva-activity-feed__header">
+        <div>
+          <div className="eva-activity-feed__title">EVENT LOG</div>
+          <div className="eva-activity-feed__title-ja">イベントログ</div>
+        </div>
+        <div className="eva-activity-feed__live">
+          <span className="eva-activity-feed__live-dot" />
+          LIVE
+        </div>
+      </div>
+      <div className="eva-activity-feed__log" ref={setLogRef}>
+        {events.map((event, i) => (
+          <div className="eva-activity-feed__entry" key={`${event.time}-${i}`}>
+            <span className="eva-activity-feed__timestamp">{event.time}</span>
+            <span className={`eva-activity-feed__badge eva-activity-feed__badge--${event.result}`}>
+              {badgeLabels[event.result]}
+            </span>
+            <span className="eva-activity-feed__suite">{event.suite}</span>
+            <span className="eva-activity-feed__message">{event.message}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Demo: Activity feed in a large hex cell — scrolling terminal-like log of test events with live data stream feel. */
+export const ActivityFeed: Story = {
+  decorators: [(Story) => <div style={{ width: 960, height: 700, border: '1px solid var(--eva-border)' }}><Story /></div>],
+  render: (args) => (
+    <HexDashboard {...args} atmosphere>
+      {/* Large activity feed cell */}
+      <HexCell col={1} row={0} colSpan={3} rowSpan={2} size="lg" state="active">
+        <ActivityFeedCell />
+      </HexCell>
+
+      {/* Small status cells around the feed */}
+      <HexCell col={0} row={0} size="sm" state="active">
+        <div style={{ color: 'var(--eva-text-gold)', fontFamily: 'var(--eva-font-mono)', fontSize: '0.5rem', textAlign: 'center' }}>
+          <div style={{ fontSize: '0.75rem' }}>830</div>
+          <div style={{ color: 'var(--eva-text-dim)' }}>TOTAL</div>
+        </div>
+      </HexCell>
+      <HexCell col={5} row={0} size="sm" state="active">
+        <div style={{ color: '#22cc44', fontFamily: 'var(--eva-font-mono)', fontSize: '0.5rem', textAlign: 'center' }}>
+          <div style={{ fontSize: '0.75rem' }}>97.1%</div>
+          <div style={{ color: 'var(--eva-text-dim)' }}>PASS</div>
+        </div>
+      </HexCell>
+      <HexCell col={0} row={2} size="sm" state="warning">
+        <div style={{ color: 'var(--eva-crimson)', fontFamily: 'var(--eva-font-mono)', fontSize: '0.5rem', textAlign: 'center' }}>
+          <div style={{ fontSize: '0.75rem' }}>17</div>
+          <div style={{ color: 'var(--eva-text-dim)' }}>FAIL</div>
+        </div>
+      </HexCell>
+      <HexCell col={5} row={2} size="sm">
+        <div style={{ color: 'var(--eva-text-dim)', fontFamily: 'var(--eva-font-mono)', fontSize: '0.5rem', textAlign: 'center' }}>
+          <div style={{ fontSize: '0.75rem' }}>24</div>
+          <div>SKIP</div>
         </div>
       </HexCell>
     </HexDashboard>
