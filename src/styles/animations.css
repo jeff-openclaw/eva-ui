@@ -56,6 +56,17 @@
     }
   }
 
+  /* ── Active Pulse (subtle glow throb for active cells) ── */
+
+  @keyframes active-pulse {
+    0%, 100% {
+      filter: drop-shadow(0 0 3px var(--_glow-color));
+    }
+    50% {
+      filter: drop-shadow(0 0 8px var(--_glow-color)) drop-shadow(0 0 14px var(--_glow-color));
+    }
+  }
+
   /* ── Warning Pulse ── */
 
   @keyframes warning-pulse {
@@ -121,6 +132,7 @@
   @media (prefers-reduced-motion: reduce) {
     .eva-hud-chrome[data-animate],
     .eva-warning-hex,
+    .eva-hex-cell--active,
     .eva-hud-chrome--berserk,
     .eva-scanline-overlay--animated,
     .eva-scanline-overlay--flicker,

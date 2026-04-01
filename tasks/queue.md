@@ -1,22 +1,20 @@
 # Eva-UI Task Queue
 
-Tasks are processed top-to-bottom. Mark as `[x]` when done.
-The cron job picks the first unchecked `[ ]` task and runs Claude Code on it.
+## HUD Visual Polish — Library
 
-## Priority — User Feedback Fixes
+- [x] HexCell visual upgrade: Add subtle glow effect on active/hover cells (box-shadow with crimson/gold glow), make borders feel like backlit display edges rather than plain 1px lines. Add a faint inner gradient that gives depth. The hex should feel like a lit-up panel on a tactical display, not a flat shape. Active cells should pulse subtly. Default cells should have a barely-visible border glow.
+- [ ] HudHeader + HudSidebar chrome polish: These should feel like physical HUD chrome — add subtle gold glow on borders (not just 1px solid), inner shadow for depth, scanline texture option. The header should feel like it's projected forward from the screen. Add a faint gradient from deep to void on backgrounds. The gold border should have a soft bloom effect.
+- [ ] HudModal + HudDrawer depth: Modals should feel like they're floating forward on a separate plane. Add layered box-shadows for depth (not just one shadow), a subtle border glow, and make the backdrop feel like the display dimming behind. The double-border effect from the spec (gold, gap, gold) needs to actually look premium.
+- [ ] HudAlert severity visuals: Each severity level should be immediately distinguishable at a glance. Info = calm gold glow, caution = warmer amber pulse, warning = urgent orange with faster pulse, critical = aggressive red with scanline interference effect. The alerts should feel like system warnings on a CRT display.
+- [ ] MagiPanel + WarningHex glow effects: MagiPanel vote states need stronger visual differentiation — approve should glow gold warmly, deny should pulse crimson aggressively, pending should flicker dimly. WarningHex should feel alarming — the pulse should affect the glow radius, not just the background opacity. Add CRT interference on berserk state.
+- [ ] CountdownTimer urgency: Normal state should have calm gold numerals with a subtle backlight. Warning state should add an amber glow that intensifies. Critical should have aggressive red glow, slight text shake/jitter, and the colon should blink. Expired should flash dramatically then settle.
+- [ ] Global HUD atmosphere: Add a shared `.eva-hud-glow` utility class that adds the signature glow treatment. Ensure all chrome components use consistent glow/shadow tokens. Add CSS custom properties for glow intensity so consumers can tune it. The overall feel should be: dark void background, elements floating forward with backlit edges, CRT scan artifacts, like you're looking at a real tactical display.
+- [ ] HexDashboard grid atmosphere: The background hex grid should feel more atmospheric — cells should have a very faint inner glow, borders should be barely visible but present (like etched glass). Add an optional `atmosphere` prop that enables subtle ambient animation on background hexes (random faint flickers). The grid should feel alive, not static.
 
-- [x] PRIORITY: Fix HexDashboard clipping — the dashboard has overflow:hidden which clips content. Change to overflow:visible or overflow:auto as appropriate. The hex grid and zone content should not be clipped. Test that zones, cells, and overlays render correctly without clipping.
-- [x] PRIORITY: HexCell content adaptation — HexCells should be able to contain arbitrary React content and display it properly. Content should be centered within the hex shape, text should wrap or scale, and cells should gracefully handle overflow. Add a `size` prop or similar that lets cells be 'sm' | 'md' | 'lg' | 'xl' or accept a custom size multiplier. Larger cells should occupy more space in the grid. Update stories to demonstrate cells with real content (text, stats, charts placeholder).
-- [x] PRIORITY: Variable-size hex grid (masonry-like) — HexGrid should support hex cells of different sizes in the same grid, similar to a masonry layout. Some cells should be able to span 2x or 3x the base size. This builds on colSpan/rowSpan but needs to actually work visually — larger cells should seamlessly integrate with smaller neighbors. The hex grid should compute positions accounting for variable sizes. Update the HexGrid and HexDashboard components and add stories showing mixed-size grids (e.g., one large MAGI panel surrounded by smaller status cells).
+## Demo Content Improvements
 
-## Quality Pass — Iter 2 Components
-
-- [x] Review HexCell: check clip-path interaction with borders, state transitions, keyboard handling, edge cases with colSpan/rowSpan
-- [x] Review HudHeader + HudSidebar: check compound component patterns, animation behavior, responsive sizing, accessibility (aria roles, keyboard nav)
-- [x] Review HudModal + HudDrawer: focus trap correctness, escape key handling, backdrop behavior, scroll lock, animation cleanup on unmount
-- [x] Review HudAlert + HudTooltip: alert stacking (limit 3 per CTO decision), auto-dismiss cleanup, tooltip positioning edge cases (viewport overflow), portal vs inline rendering
-- [x] Review MagiPanel + MagiConsole + WarningHex: vote state transitions, pulse animations, sync rate bar, majority vote logic, berserk state rendering
-- [x] Review CountdownTimer: auto-decrement accuracy (drift over time), state transitions at thresholds, expired callback, format switching
-- [x] Review HazardStripes + ScanlineOverlay: animation performance, reduced-motion compliance, CSS custom property fallbacks
-- [x] Review shared styles (animations.css, hud-chrome.css, layers.css): check all keyframes referenced are defined, z-index consistency, berserk state completeness
-- [x] Final integration test: build Storybook, verify every story renders without console errors using browser tool
+- [ ] DEMO: Richer test suite cells — each suite hex should contain: suite name + Japanese subtitle, pass/fail/skip counts as a stacked bar, pass rate percentage with trend arrow, last run timestamp, a mini sparkline or dot-chart showing recent run history (last 10 runs as colored dots). Use CSS only for the visualizations.
+- [ ] DEMO: Richer metric cells — the metric hexes should feel like data readouts: large monospace number with unit, label above, Japanese subtitle, a thin progress ring or bar showing the metric relative to a target. Add subtle number-ticking animation on mount.
+- [ ] DEMO: Add a "MAGI Voting" section — 3 MagiPanel cells in a row showing test suite approval status, with a MagiConsole aggregate below showing overall build verdict (PASS/FAIL). Wire it to the mock data so 2 suites approve + 1 denies = APPROVED.
+- [ ] DEMO: Activity feed in a hex cell — one large hex cell showing a scrolling feed of recent test events (like a terminal log), with colored timestamps and result badges. Should auto-scroll and feel like a live data stream.
+- [ ] DEMO: Polish overall layout — ensure the hex grid feels balanced, important cells are prominent (larger sizes), status cells are smaller. Add HazardStripes between zones. The sidebar should have section dividers. Header should show a live clock.

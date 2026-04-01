@@ -1,0 +1,28 @@
+=== Task: HexCell visual upgrade: Add subtle glow effect on active/hover cells (box-shadow with crimson/gold glow), make borders feel like backlit display edges rather than plain 1px lines. Add a faint inner gradient that gives depth. The hex should feel like a lit-up panel on a tactical display, not a flat shape. Active cells should pulse subtly. Default cells should have a barely-visible border glow. ===
+=== Started: Wed Apr  1 08:05:22 PM UTC 2026 ===
+Type check passes, all changes are clean. Here's what was done:
+
+### Changes Summary
+
+**HexCell.css** — Visual upgrade to tactical display aesthetic:
+
+1. **Default cells — barely-visible border glow**: Added `filter: drop-shadow(0 0 2px rgba(204,17,17, 0.15))` to all cells. Works with `clip-path` (unlike `box-shadow`), giving every hex a faint crimson edge glow.
+
+2. **Inner depth gradient**: Added a `radial-gradient(ellipse at 50% 30%, ...)` layer to all background stacks (clipped, non-clipped, no-border variants). The highlight sits slightly above center, simulating a backlit panel with subtle depth.
+
+3. **Non-clipped border enhancement**: Added `box-shadow: inset 0 0 6px rgba(204,17,17, 0.08)` for a soft inner glow on non-clipped bordered cells.
+
+4. **Active state — crimson pulse**: Active cells now run `active-pulse` animation (2.4s cycle) that throbs the `drop-shadow` between subtle and pronounced crimson glow.
+
+5. **Hover state — gold glow**: Hover cells get `filter: drop-shadow(0 0 6px rgba(204,136,0, 0.35))` for a warm gold glow effect.
+
+6. **Interactive hover**: Same gold glow treatment on interactive cell `:hover`.
+
+7. **Filter transition**: Added `filter` to the transition list so glow changes animate smoothly.
+
+**animations.css**:
+
+8. **New `active-pulse` keyframe**: Throbs between a 3px and 8px+14px double drop-shadow using `--_glow-color`.
+
+9. **Reduced-motion coverage**: Added `.eva-hex-cell--active` to the global reduced-motion rule, and a local reduced-motion block in HexCell.css that kills the animation and applies a static glow instead.
+=== Finished: Wed Apr  1 08:07:07 PM UTC 2026 === Exit: 0 ===
