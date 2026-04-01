@@ -1,0 +1,20 @@
+=== Task: DEMO: Richer metric cells — the metric hexes should feel like data readouts: large monospace number with unit, label above, Japanese subtitle, a thin progress ring or bar showing the metric relative to a target. Add subtle number-ticking animation on mount. ===
+=== Started: Wed Apr  1 08:46:41 PM UTC 2026 ===
+Everything looks good. Here's what was added:
+
+**New files:**
+- `MetricDemo.css` — styles for metric readout cells within `@layer eva-ui`, with `prefers-reduced-motion` support
+
+**Modified files:**
+- `HexDashboard.stories.tsx` — added `MetricDashboard` story
+
+**What the MetricDashboard story provides:**
+- **6 metric hex cells** (SYNC RATE, AT FIELD, PLUG DEPTH, CORE TEMP, S² OUTPUT, LCL PURITY) on a 2-row atmospheric hex grid
+- **Large monospace numbers** with unit suffix, using `tabular-nums` and theme font tokens
+- **Label + Japanese subtitle** above each readout
+- **Thin progress bar** showing value vs target, color-coded (green/gold/red by threshold)
+- **Number-ticking animation** via `useTickingNumber` hook — eased rAF interpolation from 0 to final value on mount
+- **Reduced-motion compliance** — ticking resolves immediately, CSS arrival animation and bar transition are disabled
+- **Accessibility** — `role="group"` with `aria-label` on each cell, `role="img"` with label on bars
+- **Type-safe** — passes `tsc --noEmit` cleanly, configurable decimal places per metric
+=== Finished: Wed Apr  1 08:49:11 PM UTC 2026 === Exit: 0 ===

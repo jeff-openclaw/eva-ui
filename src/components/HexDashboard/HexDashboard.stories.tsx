@@ -1,7 +1,9 @@
+import { useState, useEffect, useCallback } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { HexDashboard } from './HexDashboard';
 import { HexCell } from '../HexCell';
 import './TestSuiteDemo.css';
+import './MetricDemo.css';
 
 const fullscreen: React.CSSProperties = {
   width: '100vw',
@@ -350,6 +352,122 @@ function TestSuiteCell({ suite }: { suite: TestSuiteData }): React.JSX.Element {
     </div>
   );
 }
+
+/* ── Metric Readout Demo Data ── */
+
+interface MetricData {
+  label: string;
+  subtitle: string;
+  value: number;
+  unit: string;
+  target: number;
+  /** Number of decimal places to display. @default 1 */
+  decimals?: number;
+}
+
+const metrics: MetricData[] = [
+  { label: 'SYNC RATE', subtitle: '同期率', value: 98.2, unit: '%', target: 100 },
+  { label: 'AT FIELD', subtitle: 'ATフィールド', value: 142.7, unit: 'kPa', target: 200 },
+  { label: 'PLUG DEPTH', subtitle: '深度', value: 67.3, unit: 'm', target: 80 },
+  { label: 'CORE TEMP', subtitle: 'コア温度', value: 34.1, unit: '°C', target: 45 },
+  { label: 'S² OUTPUT', subtitle: 'S²機関出力', value: 8840, unit: 'MW', target: 10000, decimals: 0 },
+  { label: 'LCL PURITY', subtitle: 'LCL純度', value: 99.97, unit: '%', target: 100, decimals: 2 },
+];
+
+/**
+ * Hook that animates a number from 0 to `target` over `duration` ms on mount.
+ * Uses requestAnimationFrame for smooth interpolation.
+ * Respects prefers-reduced-motion by resolving immediately.
+ */
+function useTickingNumber(target: number, decimals: number, duration = 900): string {
+  const [display, setDisplay] = useState('0');
+
+  const tick = useCallback(() => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) {
+      setDisplay(target.toFixed(decimals));
+      return;
+    }
+
+    const start = performance.now();
+    let raf: number;
+
+    const step = (now: number) => {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // ease-out quad
+      const eased = 1 - (1 - progress) * (1 - progress);
+      const current = eased * target;
+      setDisplay(current.toFixed(decimals));
+      if (progress < 1) {
+        raf = requestAnimationFrame(step);
+      }
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [target, decimals, duration]);
+
+  useEffect(() => {
+    const cleanup = tick();
+    return cleanup;
+  }, [tick]);
+
+  return display;
+}
+
+function MetricCell({ metric }: { metric: MetricData }): React.JSX.Element {
+  const decimals = metric.decimals ?? 1;
+  const displayValue = useTickingNumber(metric.value, decimals);
+  const ratio = Math.min(metric.value / metric.target, 1);
+  const pct = ratio * 100;
+  const rateClass = pct >= 90 ? 'good' : pct >= 60 ? 'warn' : 'bad';
+
+  return (
+    <div className="eva-metric" role="group" aria-label={`${metric.label}: ${metric.value} ${metric.unit}`}>
+      <div className="eva-metric__label">{metric.label}</div>
+      <div className="eva-metric__subtitle">{metric.subtitle}</div>
+      <div className="eva-metric__value">
+        {displayValue}
+        <span className="eva-metric__unit">{metric.unit}</span>
+      </div>
+      <div className="eva-metric__bar-track" role="img" aria-label={`${pct.toFixed(0)}% of target`}>
+        <div
+          className={`eva-metric__bar-fill eva-metric__bar-fill--${rateClass}`}
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+      <div className="eva-metric__target">
+        TARGET {metric.target}{metric.unit}
+      </div>
+    </div>
+  );
+}
+
+/** Demo: Metric readout cells — large monospace numbers with ticking animation, progress bars, and Japanese labels. */
+export const MetricDashboard: Story = {
+  decorators: [(Story) => <div style={{ width: 960, height: 600, border: '1px solid var(--eva-border)' }}><Story /></div>],
+  render: (args) => {
+    const positions: Array<[number, number]> = [
+      [0, 0], [2, 0], [4, 0],
+      [1, 2], [3, 2], [5, 2],
+    ];
+    return (
+      <HexDashboard {...args} atmosphere>
+        {metrics.map((metric, i) => (
+          <HexCell
+            key={metric.label}
+            col={positions[i]?.[0] ?? 0}
+            row={positions[i]?.[1] ?? 0}
+            size="lg"
+            state="active"
+          >
+            <MetricCell metric={metric} />
+          </HexCell>
+        ))}
+      </HexDashboard>
+    );
+  },
+};
 
 /** Demo: Test suite cells with rich data — stacked bars, pass rates, trend arrows, and dot-chart history. */
 export const TestSuiteDashboard: Story = {

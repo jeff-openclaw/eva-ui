@@ -14,7 +14,7 @@
 ## Demo Content Improvements
 
 - [x] DEMO: Richer test suite cells — each suite hex should contain: suite name + Japanese subtitle, pass/fail/skip counts as a stacked bar, pass rate percentage with trend arrow, last run timestamp, a mini sparkline or dot-chart showing recent run history (last 10 runs as colored dots). Use CSS only for the visualizations.
-- [ ] DEMO: Richer metric cells — the metric hexes should feel like data readouts: large monospace number with unit, label above, Japanese subtitle, a thin progress ring or bar showing the metric relative to a target. Add subtle number-ticking animation on mount.
+- [x] DEMO: Richer metric cells — the metric hexes should feel like data readouts: large monospace number with unit, label above, Japanese subtitle, a thin progress ring or bar showing the metric relative to a target. Add subtle number-ticking animation on mount.
 - [ ] DEMO: Add a "MAGI Voting" section — 3 MagiPanel cells in a row showing test suite approval status, with a MagiConsole aggregate below showing overall build verdict (PASS/FAIL). Wire it to the mock data so 2 suites approve + 1 denies = APPROVED.
 - [ ] DEMO: Activity feed in a hex cell — one large hex cell showing a scrolling feed of recent test events (like a terminal log), with colored timestamps and result badges. Should auto-scroll and feel like a live data stream.
 - [ ] DEMO: Polish overall layout — ensure the hex grid feels balanced, important cells are prominent (larger sizes), status cells are smaller. Add HazardStripes between zones. The sidebar should have section dividers. Header should show a live clock.

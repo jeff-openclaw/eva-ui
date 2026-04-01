@@ -1,0 +1,116 @@
+@layer eva-ui {
+  /* ── Metric Readout Cell ── */
+  .eva-metric {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    width: 100%;
+    font-family: var(--eva-font-mono);
+    text-align: center;
+  }
+
+  /* ── Label (above number) ── */
+  .eva-metric__label {
+    font-size: var(--eva-text-xs);
+    font-weight: var(--eva-weight-bold);
+    color: var(--eva-text-gold);
+    letter-spacing: var(--eva-tracking-wider);
+    line-height: var(--eva-leading-tight);
+    text-transform: uppercase;
+  }
+
+  /* ── Japanese subtitle ── */
+  .eva-metric__subtitle {
+    font-size: 0.5rem;
+    font-family: var(--eva-font-ja);
+    color: var(--eva-text-dim);
+    line-height: var(--eva-leading-tight);
+  }
+
+  /* ── Big number readout ── */
+  .eva-metric__value {
+    font-size: var(--eva-text-2xl);
+    font-weight: var(--eva-weight-bold);
+    font-variant-numeric: tabular-nums;
+    color: var(--eva-text);
+    line-height: 1;
+    margin: 4px 0 2px;
+    letter-spacing: var(--eva-tracking-tight);
+  }
+
+  .eva-metric__unit {
+    font-size: var(--eva-text-xs);
+    font-weight: var(--eva-weight-normal);
+    color: var(--eva-text-dim);
+    margin-left: 2px;
+    letter-spacing: var(--eva-tracking-normal);
+  }
+
+  /* ── Progress bar (metric vs target) ── */
+  .eva-metric__bar-track {
+    width: 80%;
+    height: 3px;
+    border-radius: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+    margin-top: 4px;
+  }
+
+  .eva-metric__bar-fill {
+    height: 100%;
+    border-radius: 1px;
+    transition: width var(--eva-duration-slow) var(--eva-ease-out);
+  }
+
+  .eva-metric__bar-fill--good {
+    background: #22cc44;
+    box-shadow: 0 0 4px rgba(34, 204, 68, 0.4);
+  }
+
+  .eva-metric__bar-fill--warn {
+    background: var(--eva-gold);
+    box-shadow: 0 0 4px rgba(204, 136, 0, 0.4);
+  }
+
+  .eva-metric__bar-fill--bad {
+    background: var(--eva-crimson);
+    box-shadow: 0 0 4px rgba(204, 17, 17, 0.4);
+  }
+
+  /* ── Target annotation ── */
+  .eva-metric__target {
+    font-size: 0.4375rem;
+    color: var(--eva-text-dim);
+    font-variant-numeric: tabular-nums;
+    line-height: var(--eva-leading-tight);
+    margin-top: 2px;
+  }
+
+  /* ── Number tick-up animation ── */
+  @keyframes metric-arrive {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .eva-metric {
+    animation: metric-arrive var(--eva-duration-arrive) var(--eva-ease-out) both;
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .eva-metric {
+      animation: none;
+    }
+
+    .eva-metric__bar-fill {
+      transition: none;
+    }
+  }
+}
