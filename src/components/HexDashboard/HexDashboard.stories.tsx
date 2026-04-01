@@ -2,8 +2,12 @@ import { useState, useEffect, useCallback } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { HexDashboard } from './HexDashboard';
 import { HexCell } from '../HexCell';
+import { MagiPanel } from '../MagiPanel';
+import { MagiConsole } from '../MagiConsole';
+import type { MagiVote } from '../MagiPanel';
 import './TestSuiteDemo.css';
 import './MetricDemo.css';
+import './MagiVotingDemo.css';
 
 const fullscreen: React.CSSProperties = {
   width: '100vw',
@@ -496,4 +500,113 @@ export const TestSuiteDashboard: Story = {
       </HexDashboard>
     );
   },
+};
+
+/* ── MAGI Voting Demo ── */
+
+interface MagiSuiteVote {
+  suite: string;
+  subtitle: string;
+  system: 'melchior' | 'balthasar' | 'caspar';
+  vote: MagiVote;
+  syncRate: number;
+  passRate: number;
+  total: number;
+}
+
+const magiVotes: MagiSuiteVote[] = [
+  {
+    suite: 'AUTH + SYNC',
+    subtitle: '認証＋同期',
+    system: 'melchior',
+    vote: 'approve',
+    syncRate: 92.1,
+    passRate: 97.8,
+    total: 237,
+  },
+  {
+    suite: 'MAGI I/O',
+    subtitle: 'マギ入出力',
+    system: 'balthasar',
+    vote: 'approve',
+    syncRate: 88.4,
+    passRate: 100,
+    total: 201,
+  },
+  {
+    suite: 'AT FIELD',
+    subtitle: 'ATフィールド',
+    system: 'caspar',
+    vote: 'deny',
+    syncRate: 41.6,
+    passRate: 73.7,
+    total: 76,
+  },
+];
+
+function MagiVoteCell({ data }: { data: MagiSuiteVote }): React.JSX.Element {
+  const rateClass = data.passRate >= 95 ? 'good' : data.passRate >= 80 ? 'warn' : 'bad';
+
+  return (
+    <div className="eva-magi-vote-cell" role="group" aria-label={`${data.suite}: ${data.vote}`}>
+      <MagiPanel
+        system={data.system}
+        vote={data.vote}
+        syncRate={data.syncRate}
+        pulse
+      />
+      <div className="eva-magi-vote-cell__suite">
+        <div className="eva-magi-vote-cell__suite-name">{data.suite}</div>
+        <div className="eva-magi-vote-cell__suite-sub">{data.subtitle}</div>
+      </div>
+      <div className={`eva-magi-vote-cell__rate eva-magi-vote-cell__rate--${rateClass}`}>
+        {data.passRate.toFixed(1)}% <span className="eva-magi-vote-cell__total">({data.total})</span>
+      </div>
+    </div>
+  );
+}
+
+/** Demo: MAGI voting — 3 panels with test suite approval, plus MagiConsole aggregate showing build verdict. */
+export const MagiVoting: Story = {
+  decorators: [(Story) => <div style={{ width: 960, height: 700, border: '1px solid var(--eva-border)' }}><Story /></div>],
+  render: (args) => (
+    <HexDashboard {...args} atmosphere>
+      {/* Row 1: Three MAGI voting panels */}
+      {magiVotes.map((data, i) => (
+        <HexCell
+          key={data.system}
+          col={i * 2}
+          row={0}
+          size="lg"
+          state={data.vote === 'deny' ? 'warning' : 'active'}
+        >
+          <MagiVoteCell data={data} />
+        </HexCell>
+      ))}
+
+      {/* Row 2: MagiConsole aggregate showing build verdict */}
+      <HexCell col={1} row={2} colSpan={3} size="lg" state="active">
+        <div className="eva-magi-vote-console">
+          <div className="eva-magi-vote-console__label">BUILD VERDICT</div>
+          <div className="eva-magi-vote-console__label-ja">ビルド判定</div>
+          <MagiConsole
+            votes={{
+              melchior: magiVotes[0]?.vote,
+              balthasar: magiVotes[1]?.vote,
+              caspar: magiVotes[2]?.vote,
+            }}
+            syncRates={{
+              melchior: magiVotes[0]?.syncRate,
+              balthasar: magiVotes[1]?.syncRate,
+              caspar: magiVotes[2]?.syncRate,
+            }}
+            title="BUILD STATUS"
+            titleJa="ビルド状態"
+            showJapanese
+            pulse
+          />
+        </div>
+      </HexCell>
+    </HexDashboard>
+  ),
 };
