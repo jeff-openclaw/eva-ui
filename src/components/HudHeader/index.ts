@@ -1,2 +1,2 @@
 export { HudHeader } from './HudHeader';
-export type { HudHeaderProps } from './HudHeader';
+export type { HudHeaderProps, HudHeaderTitleProps, HudHeaderStatusProps } from './HudHeader';

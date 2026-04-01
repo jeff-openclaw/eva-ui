@@ -49,7 +49,7 @@ export function HudSidebar({
   const animation = position === 'left' ? 'hud-arrive-left' : 'hud-arrive-right';
 
   return (
-    <div
+    <aside
       className={`eva-hud-chrome eva-hud-sidebar eva-hud-sidebar--${position}${className ? ` ${className}` : ''}`}
       data-animate
       style={{
@@ -61,7 +61,7 @@ export function HudSidebar({
         <div className="eva-hud-sidebar__hazard-accent" />
       )}
       {children}
-    </div>
+    </aside>
   );
 }
 
