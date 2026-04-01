@@ -1,0 +1,11 @@
+=== Task: PRIORITY: Fix HexDashboard clipping — the dashboard has overflow:hidden which clips content. Change to overflow:visible or overflow:auto as appropriate. The hex grid and zone content should not be clipped. Test that zones, cells, and overlays render correctly without clipping. ===
+=== Started: Wed Apr  1 03:38:26 PM UTC 2026 ===
+**Fixed:** Changed `overflow: hidden` to `overflow: visible` on `.eva-hex-dashboard` (line 6 of `HexDashboard.css`).
+
+**Why this was a bug:** The dashboard container uses `position: relative` with all children absolutely positioned. `overflow: hidden` was clipping:
+- Corridor-effect side zones (perspective transforms push content outside bounds)
+- Overlay zone content (alerts, banners rendered at `z-index: 40`)
+- Any cell content or tooltips that extend beyond the grid area
+
+Since the grid and zones have explicit pixel dimensions set via CSS custom properties, there's no runaway content that needs to be hidden — `overflow: visible` is the correct value here.
+=== Finished: Wed Apr  1 03:39:06 PM UTC 2026 === Exit: 0 ===

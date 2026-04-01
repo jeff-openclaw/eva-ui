@@ -1,0 +1,2 @@
+=== Task: PRIORITY: Fix HexDashboard clipping — the dashboard has overflow:hidden which clips content. Change to overflow:visible or overflow:auto as appropriate. The hex grid and zone content should not be clipped. Test that zones, cells, and overlays render correctly without clipping. ===
+=== Started: Wed Apr  1 03:38:57 PM UTC 2026 ===
