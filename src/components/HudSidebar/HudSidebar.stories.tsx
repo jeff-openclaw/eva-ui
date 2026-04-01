@@ -78,3 +78,17 @@ export const RightPosition: Story = {
     </HudSidebar>
   ),
 };
+
+export const WithScanlines: Story = {
+  render: () => (
+    <HudSidebar scanlines>
+      <HudSidebar.Logo />
+      <HudSidebar.Nav>
+        <HudSidebar.NavItem label="Dashboard" active />
+        <HudSidebar.NavItem label="MAGI Status" />
+        <HudSidebar.NavItem label="Pilot Sync" />
+      </HudSidebar.Nav>
+      <HudSidebar.Footer>SCANLINE ACTIVE</HudSidebar.Footer>
+    </HudSidebar>
+  ),
+};

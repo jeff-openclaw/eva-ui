@@ -42,3 +42,12 @@ export const StatusOnly: Story = {
     </HudHeader>
   ),
 };
+
+export const WithScanlines: Story = {
+  render: () => (
+    <HudHeader scanlines>
+      <HudHeader.Title subtitle="TERMINAL DOGMA">MAGI SYSTEM INTERFACE</HudHeader.Title>
+      <HudHeader.Status>SCANLINE ACTIVE</HudHeader.Status>
+    </HudHeader>
+  ),
+};

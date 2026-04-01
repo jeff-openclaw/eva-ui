@@ -1,25 +1,43 @@
 @layer eva-ui {
   .eva-hud-sidebar {
+    position: relative;
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     padding: var(--eva-space-3);
     border: none;
-    background: var(--eva-panel);
+    background: linear-gradient(180deg, var(--eva-deep) 0%, var(--eva-void) 100%);
     animation-duration: 300ms;
     animation-timing-function: ease-out;
     animation-fill-mode: both;
-    box-shadow: none;
+    box-shadow:
+      /* inner depth */
+      inset 0 0 20px rgba(0, 0, 0, 0.4),
+      inset 0 0 40px rgba(0, 0, 0, 0.2);
     overflow: hidden;
   }
 
   .eva-hud-sidebar--left {
     border-right: 1px solid var(--eva-gold);
+    box-shadow:
+      inset 0 0 20px rgba(0, 0, 0, 0.4),
+      inset 0 0 40px rgba(0, 0, 0, 0.2),
+      /* gold bloom on right border */
+      1px 0 0 var(--eva-gold),
+      2px 0 8px rgba(204, 136, 0, 0.25),
+      4px 0 16px rgba(204, 136, 0, 0.12);
   }
 
   .eva-hud-sidebar--right {
     border-left: 1px solid var(--eva-gold);
+    box-shadow:
+      inset 0 0 20px rgba(0, 0, 0, 0.4),
+      inset 0 0 40px rgba(0, 0, 0, 0.2),
+      /* gold bloom on left border */
+      -1px 0 0 var(--eva-gold),
+      -2px 0 8px rgba(204, 136, 0, 0.25),
+      -4px 0 16px rgba(204, 136, 0, 0.12);
   }
 
   /* ── Hazard accent ── */

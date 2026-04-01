@@ -1,0 +1,2 @@
+=== Task: HudHeader + HudSidebar chrome polish: These should feel like physical HUD chrome — add subtle gold glow on borders (not just 1px solid), inner shadow for depth, scanline texture option. The header should feel like it's projected forward from the screen. Add a faint gradient from deep to void on backgrounds. The gold border should have a soft bloom effect. ===
+=== Started: Wed Apr  1 08:08:54 PM UTC 2026 ===

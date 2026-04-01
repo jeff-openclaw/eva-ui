@@ -1,0 +1,29 @@
+=== Task: HudHeader + HudSidebar chrome polish: These should feel like physical HUD chrome — add subtle gold glow on borders (not just 1px solid), inner shadow for depth, scanline texture option. The header should feel like it's projected forward from the screen. Add a faint gradient from deep to void on backgrounds. The gold border should have a soft bloom effect. ===
+=== Started: Wed Apr  1 08:07:24 PM UTC 2026 ===
+All clean. Here's what was fixed:
+
+### Changes summary
+
+**CSS — HudHeader (`HudHeader.css`)**
+- **Background**: Replaced flat `var(--eva-deep)` with `linear-gradient(180deg, var(--eva-deep), var(--eva-void))` for depth
+- **Gold bloom**: Multi-layer `box-shadow` on the bottom border — `0 2px 8px` + `0 4px 16px` in gold for a soft bloom/glow effect
+- **Inner depth**: `inset 0 1px 0` gold highlight on top edge + `inset 0 -4px 12px` dark shadow at bottom for recessed panel feel
+- **Projected forward**: Added `transform: translateZ(24px)` to hold the forward-Z position from the arrival animation, so the header permanently feels projected out
+- **Scanlines support**: Added `position: relative` (required by `.eva-scanlines::after`)
+
+**CSS — HudSidebar (`HudSidebar.css`)**
+- **Background**: Same deep→void gradient
+- **Inner depth**: Dual inset shadows for recessed panel illusion
+- **Gold bloom**: Per-side gold glow — `--left` gets rightward bloom, `--right` gets leftward bloom, matching their border edge
+- **Scanlines support**: Added `position: relative`
+
+**TSX — Both components**
+- Added `scanlines?: boolean` prop (default `false`) with JSDoc
+- When enabled, applies the existing `eva-scanlines` utility class which overlays CRT-style repeating scanline texture via `::after`
+- Refactored className assembly to use `filter(Boolean).join()` pattern for cleaner multi-class composition
+
+**Stories**
+- Added `WithScanlines` story to both `HudHeader` and `HudSidebar`
+
+**Type check**: `npx tsc --noEmit` passes clean.
+=== Finished: Wed Apr  1 08:09:15 PM UTC 2026 === Exit: 0 ===

@@ -12,6 +12,8 @@ export interface HudSidebarProps {
   visible?: boolean;
   /** Show hazard stripe accent at top. @default false */
   hazardAccent?: boolean;
+  /** Overlay scanline texture for CRT depth. @default false */
+  scanlines?: boolean;
   /** CSS class. */
   className?: string;
   children?: ReactNode;
@@ -41,6 +43,7 @@ export function HudSidebar({
   width,
   visible = true,
   hazardAccent = false,
+  scanlines = false,
   className,
   children,
 }: HudSidebarProps): React.JSX.Element | null {
@@ -48,9 +51,17 @@ export function HudSidebar({
 
   const animation = position === 'left' ? 'hud-arrive-left' : 'hud-arrive-right';
 
+  const classes = [
+    'eva-hud-chrome',
+    'eva-hud-sidebar',
+    `eva-hud-sidebar--${position}`,
+    scanlines && 'eva-scanlines',
+    className,
+  ].filter(Boolean).join(' ');
+
   return (
     <aside
-      className={`eva-hud-chrome eva-hud-sidebar eva-hud-sidebar--${position}${className ? ` ${className}` : ''}`}
+      className={classes}
       data-animate
       style={{
         width: width ? (typeof width === 'number' ? `${width}px` : width) : undefined,

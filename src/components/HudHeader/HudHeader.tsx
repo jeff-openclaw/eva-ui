@@ -8,6 +8,8 @@ export interface HudHeaderProps {
   height?: number | string;
   /** Show/hide with animation. @default true */
   visible?: boolean;
+  /** Overlay scanline texture for CRT depth. @default false */
+  scanlines?: boolean;
   /** CSS class. */
   className?: string;
   /** Header content. */
@@ -33,15 +35,23 @@ export interface HudHeaderStatusProps {
 export function HudHeader({
   height,
   visible = true,
+  scanlines = false,
   className,
   children,
 }: HudHeaderProps): React.JSX.Element | null {
   if (!visible) return null;
 
+  const classes = [
+    'eva-hud-chrome',
+    'eva-hud-header',
+    scanlines && 'eva-scanlines',
+    className,
+  ].filter(Boolean).join(' ');
+
   return (
     <header
       role="banner"
-      className={`eva-hud-chrome eva-hud-header${className ? ` ${className}` : ''}`}
+      className={classes}
       data-animate
       style={height ? { height: typeof height === 'number' ? `${height}px` : height } : undefined}
     >
