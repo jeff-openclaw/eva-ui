@@ -41,6 +41,9 @@
     --pulse-high: rgba(204, 17, 17, 0.50);
     --pulse-color: var(--eva-crimson);
     border-color: var(--eva-crimson);
+    animation:
+      berserk-pulse var(--pulse-interval, 400ms) ease-in-out infinite,
+      crt-interference 0.8s steps(1) infinite;
   }
   .eva-warning-hex--berserk .eva-warning-hex__label {
     animation: berserk-text 0.4s steps(2, end) infinite;
@@ -69,6 +72,7 @@
   /* ── Reduced motion ── */
   @media (prefers-reduced-motion: reduce) {
     .eva-warning-hex,
+    .eva-warning-hex--berserk,
     .eva-warning-hex--berserk .eva-warning-hex__label {
       animation: none !important;
     }

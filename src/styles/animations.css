@@ -72,11 +72,11 @@
   @keyframes warning-pulse {
     0%, 100% {
       background-color: var(--pulse-low);
-      box-shadow: 0 0 0 0 var(--pulse-color);
+      box-shadow: 0 0 4px 0 var(--pulse-color);
     }
     50% {
       background-color: var(--pulse-high);
-      box-shadow: 0 0 12px 2px var(--pulse-color);
+      box-shadow: 0 0 20px 6px var(--pulse-color);
     }
   }
 
@@ -119,12 +119,66 @@
     to { background-position: var(--stripe-size, 11.31px) 0; }
   }
 
-  /* ── MAGI Vote Flash ── */
+  /* ── MAGI Vote Animations ── */
 
-  @keyframes vote-flash {
-    0% { opacity: 1; }
-    50% { opacity: 0.4; }
-    100% { opacity: 1; }
+  @keyframes vote-glow-approve {
+    0%, 100% {
+      box-shadow: 0 0 8px rgba(204, 136, 0, 0.15);
+    }
+    50% {
+      box-shadow: 0 0 18px 4px rgba(204, 136, 0, 0.4), 0 0 36px 8px rgba(204, 136, 0, 0.15);
+    }
+  }
+
+  @keyframes vote-glow-deny {
+    0%, 100% {
+      box-shadow: 0 0 8px rgba(204, 17, 17, 0.2);
+      background-color: var(--eva-hex-fill);
+    }
+    40% {
+      box-shadow: 0 0 22px 6px rgba(204, 17, 17, 0.5), 0 0 44px 10px rgba(255, 34, 0, 0.2);
+      background-color: rgba(204, 17, 17, 0.25);
+    }
+    60% {
+      box-shadow: 0 0 22px 6px rgba(204, 17, 17, 0.5), 0 0 44px 10px rgba(255, 34, 0, 0.2);
+      background-color: rgba(204, 17, 17, 0.25);
+    }
+  }
+
+  @keyframes vote-flicker-pending {
+    0%, 100% { opacity: 0.5; }
+    30% { opacity: 0.6; }
+    32% { opacity: 0.35; }
+    34% { opacity: 0.55; }
+    70% { opacity: 0.5; }
+    72% { opacity: 0.4; }
+    74% { opacity: 0.55; }
+  }
+
+  /* ── CRT Interference ── */
+
+  @keyframes crt-interference {
+    0%, 100% {
+      clip-path: inset(0 0 0 0);
+    }
+    5% {
+      clip-path: inset(40% 0 20% 0);
+    }
+    10% {
+      clip-path: inset(0 0 0 0);
+    }
+    15% {
+      clip-path: inset(10% 0 60% 0);
+    }
+    20% {
+      clip-path: inset(0 0 0 0);
+    }
+    55% {
+      clip-path: inset(70% 0 5% 0);
+    }
+    60% {
+      clip-path: inset(0 0 0 0);
+    }
   }
 
   /* ── Reduced Motion ── */
@@ -137,7 +191,9 @@
     .eva-scanline-overlay--animated,
     .eva-scanline-overlay--flicker,
     .eva-hazard-stripes--animated,
-    .eva-magi-panel--pulse {
+    .eva-magi-panel--pulse,
+    .eva-magi-panel--pending,
+    .eva-warning-hex--berserk {
       animation: none !important;
     }
   }

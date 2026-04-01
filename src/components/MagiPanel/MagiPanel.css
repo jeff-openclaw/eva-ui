@@ -31,6 +31,7 @@
   .eva-magi-panel--pending {
     background: transparent;
     border-color: var(--eva-border);
+    animation: vote-flicker-pending 3s steps(1) infinite;
   }
   .eva-magi-panel--pending .eva-magi-panel__vote { color: var(--eva-text-dim); }
 
@@ -43,12 +44,10 @@
 
   /* ── Pulse ── */
   .eva-magi-panel--pulse.eva-magi-panel--approve {
-    animation: vote-flash 2s ease-in-out infinite;
-    box-shadow: 0 0 12px rgba(204, 136, 0, 0.2);
+    animation: vote-glow-approve 2.5s ease-in-out infinite;
   }
   .eva-magi-panel--pulse.eva-magi-panel--deny {
-    animation: vote-flash 2s ease-in-out infinite;
-    box-shadow: 0 0 12px rgba(204, 17, 17, 0.2);
+    animation: vote-glow-deny 1.2s ease-in-out infinite;
   }
 
   /* ── Header ── */

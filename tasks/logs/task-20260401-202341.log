@@ -1,0 +1,26 @@
+=== Task: MagiPanel + WarningHex glow effects: MagiPanel vote states need stronger visual differentiation — approve should glow gold warmly, deny should pulse crimson aggressively, pending should flicker dimly. WarningHex should feel alarming — the pulse should affect the glow radius, not just the background opacity. Add CRT interference on berserk state. ===
+=== Started: Wed Apr  1 08:23:41 PM UTC 2026 ===
+Clean typecheck. Here's what I found and fixed:
+
+### MagiPanel — vote state differentiation
+
+**Problem**: All vote states used the same `vote-flash` keyframe (a simple opacity fade 1→0.4→1). Approve and deny looked identical. Pending had no animation at all.
+
+**Fixes**:
+- **Approve** (`vote-glow-approve`): Warm gold glow that breathes slowly (2.5s), expanding from 8px to 18px+36px dual-layer box-shadow — feels like a warm confirmation lamp
+- **Deny** (`vote-glow-deny`): Aggressive crimson pulse (1.2s, faster), expanding to 22px+44px glow with background flaring brighter — feels urgent and hostile
+- **Pending** (`vote-flicker-pending`): Dim opacity flicker using `steps(1)` to create a stuttery, unstable CRT feel — reads as "awaiting input"
+
+### WarningHex — glow radius + berserk CRT
+
+**Problem**: `warning-pulse` only pulsed background opacity with a tiny `0 0 12px 2px` shadow. The `berserk-pulse` keyframe existed in animations.css but was never actually used by the berserk level. No CRT interference.
+
+**Fixes**:
+- **warning-pulse**: Glow now expands from `0 0 4px 0` to `0 0 20px 6px` — the radius change is the primary visual, not just background fade
+- **Berserk**: Now uses `berserk-pulse` (which swaps border between crimson/warning and expands glow to 40px) + new `crt-interference` animation that clips horizontal bands in/out via `clip-path: inset()` at stepped intervals
+- **Reduced motion**: Added explicit `berserk` selector to both local and global reduced-motion rules (berserk overrides the base animation, so it needed its own entry)
+
+### New `crt-interference` keyframe
+
+A `steps(1)` clip-path animation that slices horizontal bands in and out — simulates CRT scan-line tearing/signal corruption. Applied only to berserk state.
+=== Finished: Wed Apr  1 08:25:30 PM UTC 2026 === Exit: 0 ===
