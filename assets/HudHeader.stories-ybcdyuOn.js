@@ -1,0 +1,16 @@
+import{j as e}from"./jsx-runtime-Cf8x2fCZ.js";/* empty css                   */import"./index-yBjzXJbu.js";function a({height:r,visible:n=!0,className:i,children:u}){return n?e.jsx("header",{role:"banner",className:`eva-hud-chrome eva-hud-header${i?` ${i}`:""}`,"data-animate":!0,style:r?{height:typeof r=="number"?`${r}px`:r}:void 0,children:u}):null}function l({subtitle:r,children:n}){return e.jsxs("div",{className:"eva-hud-header__title",children:[e.jsx("div",{className:"eva-hud-header__title-main",children:n}),r&&e.jsx("div",{className:"eva-hud-header__title-sub",children:r})]})}function o({children:r}){return e.jsx("div",{className:"eva-hud-header__status",children:r})}a.Title=l;a.Status=o;a.__docgenInfo={description:`Horizontal bar for the top gap zone.
+Displays titles, system status, breadcrumbs.`,methods:[{name:"Title",docblock:null,modifiers:["static"],params:[{name:"{ subtitle, children }: HudHeaderTitleProps",optional:!1,type:{name:"HudHeaderTitleProps",alias:"HudHeaderTitleProps"}}],returns:{type:{name:"React.JSX.Element"}}},{name:"Status",docblock:null,modifiers:["static"],params:[{name:"{ children }: HudHeaderStatusProps",optional:!1,type:{name:"HudHeaderStatusProps",alias:"HudHeaderStatusProps"}}],returns:{type:{name:"React.JSX.Element"}}}],displayName:"HudHeader",props:{height:{required:!1,tsType:{name:"union",raw:"number | string",elements:[{name:"number"},{name:"string"}]},description:"Fixed height in px. If omitted, fills the top gap zone."},visible:{required:!1,tsType:{name:"boolean"},description:"Show/hide with animation. @default true",defaultValue:{value:"true",computed:!1}},className:{required:!1,tsType:{name:"string"},description:"CSS class."},children:{required:!1,tsType:{name:"ReactNode"},description:"Header content."}}};const p={title:"Chrome/HudHeader",component:a,parameters:{backgrounds:{default:"eva-void"}},decorators:[r=>e.jsx("div",{style:{width:700,height:56},children:e.jsx(r,{})})]},t={render:()=>e.jsxs(a,{children:[e.jsx(a.Title,{subtitle:"CENTRAL DOGMA",children:"第壱中央指令所"}),e.jsx(a.Status,{children:"MAGI SYSTEM: NOMINAL"})]})},s={render:()=>e.jsxs(a,{children:[e.jsx(a.Title,{subtitle:"第壱中央指令所",children:"NERV COMMAND CENTER"}),e.jsx(a.Status,{children:"ALL SYSTEMS OPERATIONAL"})]})},d={render:()=>e.jsx(a,{children:e.jsx(a.Status,{children:"PATTERN BLUE DETECTED — ALERT LEVEL 1"})})};t.parameters={...t.parameters,docs:{...t.parameters?.docs,source:{originalSource:`{
+  render: () => <HudHeader>
+      <HudHeader.Title subtitle="CENTRAL DOGMA">第壱中央指令所</HudHeader.Title>
+      <HudHeader.Status>MAGI SYSTEM: NOMINAL</HudHeader.Status>
+    </HudHeader>
+}`,...t.parameters?.docs?.source}}};s.parameters={...s.parameters,docs:{...s.parameters?.docs,source:{originalSource:`{
+  render: () => <HudHeader>
+      <HudHeader.Title subtitle="第壱中央指令所">NERV COMMAND CENTER</HudHeader.Title>
+      <HudHeader.Status>ALL SYSTEMS OPERATIONAL</HudHeader.Status>
+    </HudHeader>
+}`,...s.parameters?.docs?.source}}};d.parameters={...d.parameters,docs:{...d.parameters?.docs,source:{originalSource:`{
+  render: () => <HudHeader>
+      <HudHeader.Status>PATTERN BLUE DETECTED — ALERT LEVEL 1</HudHeader.Status>
+    </HudHeader>
+}`,...d.parameters?.docs?.source}}};const h=["Default","EnglishTitle","StatusOnly"];export{t as Default,s as EnglishTitle,d as StatusOnly,h as __namedExportsOrder,p as default};
