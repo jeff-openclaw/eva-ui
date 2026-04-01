@@ -38,6 +38,7 @@ export function ScanlineOverlay({
 
   return (
     <div
+      aria-hidden="true"
       className={classes}
       style={{
         '--scanline-height': `${lineHeight}px`,

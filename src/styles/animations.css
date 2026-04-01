@@ -91,7 +91,7 @@
 
   @keyframes scanline-drift {
     from { background-position: 0 0; }
-    to { background-position: 0 calc(var(--eva-scanline-height, 2px) * 2); }
+    to { background-position: 0 calc(var(--scanline-height, 2px) * 2); }
   }
 
   @keyframes scanline-flicker {
@@ -105,7 +105,7 @@
 
   @keyframes stripe-scroll {
     from { background-position: 0 0; }
-    to { background-position: calc(var(--eva-hazard-width, 4px) * 2 * 1.414) 0; }
+    to { background-position: var(--stripe-size, 11.31px) 0; }
   }
 
   /* ── MAGI Vote Flash ── */

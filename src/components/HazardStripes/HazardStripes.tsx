@@ -35,10 +35,11 @@ export function HazardStripes({
   className,
 }: HazardStripesProps): React.JSX.Element {
   const period = stripeWidth * 2 * 1.414;
-  const duration = period / speed;
+  const duration = speed > 0 ? period / speed : 1e9;
 
   return (
     <div
+      aria-hidden="true"
       className={`eva-hazard-stripes${animated ? ' eva-hazard-stripes--animated' : ''}${className ? ` ${className}` : ''}`}
       style={{
         '--stripe-angle': `${angle}deg`,
