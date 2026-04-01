@@ -1,0 +1,2 @@
+=== Task: HudModal + HudDrawer depth: Modals should feel like they're floating forward on a separate plane. Add layered box-shadows for depth (not just one shadow), a subtle border glow, and make the backdrop feel like the display dimming behind. The double-border effect from the spec (gold, gap, gold) needs to actually look premium. ===
+=== Started: Wed Apr  1 08:09:32 PM UTC 2026 ===

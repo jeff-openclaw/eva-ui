@@ -97,7 +97,7 @@ export function HudModal({
     <div className="eva-hud-modal__backdrop" onClick={handleBackdropClick}>
       <div
         ref={modalRef}
-        className={`eva-hud-chrome eva-hud-modal${berserk ? ' eva-hud-chrome--berserk' : ''}${className ? ` ${className}` : ''}`}
+        className={`eva-hud-chrome eva-hud-chrome--modal eva-hud-modal${berserk ? ' eva-hud-chrome--berserk' : ''}${className ? ` ${className}` : ''}`}
         role="dialog"
         aria-modal="true"
         aria-label={title}
