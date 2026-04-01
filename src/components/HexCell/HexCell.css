@@ -23,11 +23,12 @@
     border: 1px solid var(--eva-border);
   }
   .eva-hex-cell--clipped:not(.eva-hex-cell--no-border) {
-    /* Clipped cells: border is invisible, use background workaround */
-    border: none;
+    /* Clipped cells: real borders are clipped, so simulate via background gradients.
+       Needs explicit border (transparent) so padding-box vs border-box differ. */
+    border: 2px solid transparent;
     background:
-      linear-gradient(var(--eva-hex-fill), var(--eva-hex-fill)) padding-box,
-      linear-gradient(var(--eva-border), var(--eva-border)) border-box;
+      linear-gradient(var(--eva-hex-fill, #0a0a12), var(--eva-hex-fill, #0a0a12)) padding-box,
+      linear-gradient(var(--eva-border, #334), var(--eva-border, #334)) border-box;
   }
 
   /* ── State: default ── */
@@ -62,13 +63,21 @@
     animation: warning-pulse 1200ms ease-in-out infinite;
   }
 
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .eva-hex-cell--warning {
+      animation: none;
+      background-color: var(--pulse-high);
+    }
+  }
+
   /* ── Interactive ── */
   .eva-hex-cell--interactive {
     cursor: pointer;
     user-select: none;
   }
 
-  .eva-hex-cell--interactive:hover {
+  .eva-hex-cell--interactive:not(.eva-hex-cell--disabled):not(.eva-hex-cell--warning):hover {
     background: var(--eva-hex-active);
   }
 

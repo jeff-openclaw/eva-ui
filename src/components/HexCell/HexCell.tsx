@@ -66,12 +66,15 @@ export function HexCell({
     [interactive, onClick, col, row],
   );
 
+  const isDisabled = state === 'disabled';
+  const isInteractive = interactive && !isDisabled;
+
   const classes = [
     'eva-hex-cell',
     `eva-hex-cell--${state}`,
     clipped && !isSpanning && 'eva-hex-cell--clipped',
     !showBorder && 'eva-hex-cell--no-border',
-    interactive && 'eva-hex-cell--interactive',
+    isInteractive && 'eva-hex-cell--interactive',
     className,
   ].filter(Boolean).join(' ');
 
@@ -83,10 +86,10 @@ export function HexCell({
       data-col-span={colSpan > 1 ? colSpan : undefined}
       data-row-span={rowSpan > 1 ? rowSpan : undefined}
       role={interactive ? 'button' : undefined}
-      tabIndex={interactive ? 0 : undefined}
-      onClick={interactive ? handleClick : undefined}
-      onKeyDown={interactive ? handleKeyDown : undefined}
-      aria-disabled={state === 'disabled' ? true : undefined}
+      tabIndex={isInteractive ? 0 : undefined}
+      onClick={isInteractive ? handleClick : undefined}
+      onKeyDown={isInteractive ? handleKeyDown : undefined}
+      aria-disabled={isDisabled || undefined}
     >
       {children}
     </div>
