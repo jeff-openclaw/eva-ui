@@ -127,5 +127,48 @@ export function computeMasonryPlacements(
     // If not placed, skip this cell (grid is full for this size)
   }
 
+  // Post-placement centering: shift each row's cells to center within the grid
+  centerPlacementsPerRow(placements, gridCols);
+
   return placements;
+}
+
+/**
+ * Center each row's placements horizontally within the grid.
+ *
+ * For each row that has placements, computes the min and max columns used
+ * (accounting for cell footprints), then shifts all placements in that row
+ * so the occupied span is centered within `gridCols`.
+ *
+ * Mutates placements in place.
+ */
+function centerPlacementsPerRow(placements: MasonryPlacement[], gridCols: number): void {
+  // Group placements by their anchor row (the row where they start)
+  const rowMap = new Map<number, MasonryPlacement[]>();
+  for (const p of placements) {
+    let list = rowMap.get(p.row);
+    if (!list) {
+      list = [];
+      rowMap.set(p.row, list);
+    }
+    list.push(p);
+  }
+
+  // For each row, compute the bounding column extent and shift to center
+  for (const rowPlacements of rowMap.values()) {
+    let minCol = gridCols;
+    let maxColEnd = 0;
+    for (const p of rowPlacements) {
+      if (p.col < minCol) minCol = p.col;
+      if (p.col + p.footprintCols > maxColEnd) maxColEnd = p.col + p.footprintCols;
+    }
+
+    const usedWidth = maxColEnd - minCol;
+    const offset = Math.floor((gridCols - usedWidth) / 2) - minCol;
+    if (offset === 0) continue;
+
+    for (const p of rowPlacements) {
+      p.col += offset;
+    }
+  }
 }

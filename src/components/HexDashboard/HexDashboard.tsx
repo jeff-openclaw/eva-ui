@@ -34,7 +34,7 @@ export interface HexDashboardProps {
   layout?: HexDashboardLayoutMode;
   /** Hex circumradius in px. @default 44 */
   cellSize?: number;
-  /** Gap between hex cells in px. @default 4 */
+  /** Gap between hex cells in px. @default 3 */
   gap?: number;
   /** Minimum gap zone width in px. @default 48 */
   minGapSize?: number;
@@ -74,7 +74,7 @@ export interface HexDashboardProps {
 export function HexDashboard({
   layout: layoutMode = 'manual',
   cellSize = 44,
-  gap = 4,
+  gap = 3,
   minGapSize = 48,
   maxGapSize,
   gapDistribution = 'auto',
