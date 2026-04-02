@@ -25,9 +25,9 @@ export function resolveHexCellSize(size: HexCellSize | number | undefined): numb
 /** Props for the HexCell component. */
 export interface HexCellProps {
   /** Column position in offset coordinates (0-indexed). */
-  col: number;
+  col?: number;
   /** Row position in offset coordinates (0-indexed). */
-  row: number;
+  row?: number;
   /** Number of hex cells to span horizontally. @default 1 */
   colSpan?: number;
   /** Number of hex cells to span vertically. @default 1 */
@@ -44,6 +44,10 @@ export interface HexCellProps {
   onClick?: (col: number, row: number) => void;
   /** Show hex border. @default true */
   showBorder?: boolean;
+  /** Masonry sort priority — lower values placed first. @default 0 */
+  priority?: number;
+  /** Explicit masonry ordering (alias for priority). @default 0 */
+  order?: number;
   /** CSS class. */
   className?: string;
   /** Cell content. */
@@ -58,8 +62,8 @@ export interface HexCellProps {
  * and applies absolute positioning via the layout engine.
  */
 export function HexCell({
-  col,
-  row,
+  col = 0,
+  row = 0,
   colSpan = 1,
   rowSpan = 1,
   size,

@@ -8,9 +8,9 @@ export { HexGrid } from './components/HexGrid';
 export type { HexGridProps } from './components/HexGrid';
 
 export { HexDashboard } from './components/HexDashboard';
-export type { HexDashboardProps, HexDashboardZones } from './components/HexDashboard';
-export { computeHexDashboardLayout, useHexDashboardLayout } from './components/HexDashboard';
-export type { HexDashboardLayout, HexDashboardLayoutConfig, GapDistribution, GapDistributionVertical } from './components/HexDashboard';
+export type { HexDashboardProps, HexDashboardZones, HexDashboardLayoutMode } from './components/HexDashboard';
+export { computeHexDashboardLayout, computeMasonryPlacements, useHexDashboardLayout } from './components/HexDashboard';
+export type { HexDashboardLayout, HexDashboardLayoutConfig, GapDistribution, GapDistributionVertical, MasonryPlacement, MasonryChild } from './components/HexDashboard';
 
 export { HexCell, resolveHexCellSize } from './components/HexCell';
 export type { HexCellProps, HexCellState, HexCellSize } from './components/HexCell';

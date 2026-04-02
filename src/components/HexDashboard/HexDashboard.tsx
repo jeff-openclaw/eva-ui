@@ -5,6 +5,7 @@ import {
   type GapDistributionVertical,
   type HexDashboardLayout,
 } from './computeLayout';
+import { computeMasonryPlacements, type MasonryChild } from './computeMasonry';
 import { SQRT3 } from '../../utils/hexGeometry';
 import type { HexCellProps } from '../HexCell/HexCell';
 import { resolveHexCellSize } from '../HexCell/HexCell';
@@ -24,8 +25,13 @@ export interface HexDashboardZones {
   overlay?: ReactNode;
 }
 
+/** Layout mode for HexDashboard. */
+export type HexDashboardLayoutMode = 'manual' | 'masonry';
+
 /** Props for the HexDashboard component. */
 export interface HexDashboardProps {
+  /** Layout mode — 'manual' requires col/row on children, 'masonry' auto-places. @default 'manual' */
+  layout?: HexDashboardLayoutMode;
   /** Hex circumradius in px. @default 44 */
   cellSize?: number;
   /** Gap between hex cells in px. @default 4 */
@@ -66,6 +72,7 @@ export interface HexDashboardProps {
  * where chrome (navbars, headers, etc.) mounts as first-class layout regions.
  */
 export function HexDashboard({
+  layout: layoutMode = 'manual',
   cellSize = 44,
   gap = 4,
   minGapSize = 48,
@@ -110,12 +117,74 @@ export function HexDashboard({
 
   const effectiveSize = cellSize - gap / 2;
 
+  // Collect valid HexCell children for masonry placement
+  const validChildren = useMemo(() => {
+    const result: { element: React.ReactElement; index: number }[] = [];
+    Children.forEach(children, (child, index) => {
+      if (isValidElement(child)) {
+        result.push({ element: child, index });
+      }
+    });
+    return result;
+  }, [children]);
+
+  // Compute masonry placements when in masonry mode
+  const masonryPlacements = useMemo(() => {
+    if (layoutMode !== 'masonry' || !layout) return null;
+    const masonryChildren: MasonryChild[] = validChildren.map(({ element }) => {
+      const props = element.props as HexCellProps;
+      return {
+        size: props.size,
+        priority: props.priority ?? props.order ?? 0,
+      };
+    });
+    return computeMasonryPlacements(masonryChildren, layout.cols, layout.rows);
+  }, [layoutMode, layout, validChildren]);
+
   // Position HexCell children using layout spacing directly
   const positionedChildren = useMemo(() => {
     if (!layout) return null;
     const visualW = SQRT3 * effectiveSize;
     const visualH = 2 * effectiveSize;
 
+    if (layoutMode === 'masonry' && masonryPlacements) {
+      return masonryPlacements.map((placement) => {
+        const entry = validChildren[placement.childIndex];
+        if (!entry) return null;
+        const { element: child } = entry;
+        const props = child.props as HexCellProps;
+
+        const col = placement.col;
+        const row = placement.row;
+
+        const cx = col * layout.horizSpacing
+          + (row % 2 === 1 ? layout.horizSpacing / 2 : 0)
+          + layout.cellWidth / 2;
+        const cy = row * layout.vertSpacing + cellSize;
+
+        const sizeMultiplier = resolveHexCellSize(props.size);
+        const spanW = visualW * sizeMultiplier;
+        const spanH = visualH * sizeMultiplier;
+
+        return (
+          <div
+            key={`cell-${col}-${row}`}
+            className="eva-hex-dashboard__cell-wrapper"
+            style={{
+              position: 'absolute',
+              left: cx - spanW / 2,
+              top: cy - spanH / 2,
+              width: spanW,
+              height: spanH,
+            }}
+          >
+            {child}
+          </div>
+        );
+      });
+    }
+
+    // Manual mode — original behavior
     return Children.map(children, (child) => {
       if (!isValidElement(child)) return child;
       const props = child.props as HexCellProps;
@@ -157,7 +226,7 @@ export function HexDashboard({
         </div>
       );
     });
-  }, [children, layout, effectiveSize, cellSize]);
+  }, [children, layout, effectiveSize, cellSize, layoutMode, masonryPlacements, validChildren]);
 
   // CSS custom properties for zone dimensions
   const dashboardStyle = layout ? {
@@ -180,25 +249,20 @@ export function HexDashboard({
   const suppressedBgKeys = useMemo(() => {
     if (!layout) return new Set<string>();
     const suppressed = new Set<string>();
-    Children.forEach(children, (child) => {
-      if (!isValidElement(child)) return;
-      const props = child.props as HexCellProps;
-      if (props.col == null || props.row == null) return;
-      const sizeMultiplier = resolveHexCellSize(props.size);
-      const colSpan = props.colSpan ?? 1;
-      if (sizeMultiplier <= 1 && colSpan <= 1 && (props.rowSpan ?? 1) <= 1) return;
-      // Compute pixel center of this cell
-      const cx = props.col * layout.horizSpacing
-        + (props.row % 2 === 1 ? layout.horizSpacing / 2 : 0)
+
+    /** Suppress background hexes near a large cell at (cellCol, cellRow). */
+    const suppressAround = (cellCol: number, cellRow: number, sizeMultiplier: number, colSpan: number, rowSpan: number) => {
+      if (sizeMultiplier <= 1 && colSpan <= 1 && rowSpan <= 1) return;
+      const cx = cellCol * layout.horizSpacing
+        + (cellRow % 2 === 1 ? layout.horizSpacing / 2 : 0)
         + layout.cellWidth / 2;
-      const cy = props.row * layout.vertSpacing + (layout.cellHeight / 2);
+      const cy = cellRow * layout.vertSpacing + (layout.cellHeight / 2);
       const radius = effectiveSize * Math.max(sizeMultiplier, colSpan) * 0.9;
-      // Scan nearby grid cells and suppress those within radius
       const scanRange = Math.ceil(Math.max(sizeMultiplier, colSpan)) + 1;
       for (let dr = -scanRange; dr <= scanRange; dr++) {
         for (let dc = -scanRange; dc <= scanRange; dc++) {
-          const r = props.row + dr;
-          const c = props.col + dc;
+          const r = cellRow + dr;
+          const c = cellCol + dc;
           if (r < 0 || r >= layout.rows || c < 0 || c >= layout.cols) continue;
           const hx = c * layout.horizSpacing
             + (r % 2 === 1 ? layout.horizSpacing / 2 : 0)
@@ -211,9 +275,28 @@ export function HexDashboard({
           }
         }
       }
-    });
+    };
+
+    if (layoutMode === 'masonry' && masonryPlacements) {
+      for (const placement of masonryPlacements) {
+        const entry = validChildren[placement.childIndex];
+        if (!entry) continue;
+        const props = entry.element.props as HexCellProps;
+        const sizeMultiplier = resolveHexCellSize(props.size);
+        suppressAround(placement.col, placement.row, sizeMultiplier, props.colSpan ?? 1, props.rowSpan ?? 1);
+      }
+    } else {
+      Children.forEach(children, (child) => {
+        if (!isValidElement(child)) return;
+        const props = child.props as HexCellProps;
+        if (props.col == null || props.row == null) return;
+        const sizeMultiplier = resolveHexCellSize(props.size);
+        suppressAround(props.col, props.row, sizeMultiplier, props.colSpan ?? 1, props.rowSpan ?? 1);
+      });
+    }
+
     return suppressed;
-  }, [children, layout, effectiveSize]);
+  }, [children, layout, effectiveSize, layoutMode, masonryPlacements, validChildren]);
 
   // Atmosphere: stable random delays per hex (seeded by col,row)
   const atmosphereDelays = useMemo(() => {

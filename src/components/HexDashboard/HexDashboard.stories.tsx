@@ -982,3 +982,269 @@ export const FullDemo: Story = {
     </HexDashboard>
   ),
 };
+
+/* ── Masonry Layout Stories ── */
+
+const masonryCellStyle: React.CSSProperties = {
+  color: 'var(--eva-text-gold)',
+  fontFamily: 'var(--eva-font-mono)',
+  fontSize: '0.625rem',
+  textAlign: 'center',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: '100%',
+};
+
+/** Masonry layout — 10 mixed-size cells auto-placed without col/row. */
+export const MasonryBasic: Story = {
+  decorators: [(Story) => <div style={{ width: 960, height: 600, border: '1px solid var(--eva-border)' }}><Story /></div>],
+  render: (args) => (
+    <HexDashboard {...args} layout="masonry" atmosphere>
+      <HexCell size="xl" state="active">
+        <div style={masonryCellStyle}>
+          <div style={{ fontSize: '1rem' }}>MAIN</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>メイン • XL</div>
+        </div>
+      </HexCell>
+      <HexCell size="lg" state="active">
+        <div style={masonryCellStyle}>
+          <div>SYNC RATE</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>同期率 • LG</div>
+        </div>
+      </HexCell>
+      <HexCell size="lg" state="warning">
+        <div style={masonryCellStyle}>
+          <div>AT FIELD</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>ATフィールド • LG</div>
+        </div>
+      </HexCell>
+      <HexCell size="md" state="active">
+        <div style={masonryCellStyle}>
+          <div>TEMP</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>温度</div>
+        </div>
+      </HexCell>
+      <HexCell size="md" state="active">
+        <div style={masonryCellStyle}>
+          <div>DEPTH</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>深度</div>
+        </div>
+      </HexCell>
+      <HexCell size="md" state="active">
+        <div style={masonryCellStyle}>
+          <div>PURITY</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>純度</div>
+        </div>
+      </HexCell>
+      <HexCell size="sm" state="active">
+        <div style={masonryCellStyle}><div>OK</div></div>
+      </HexCell>
+      <HexCell size="sm" state="warning">
+        <div style={masonryCellStyle}><div>!</div></div>
+      </HexCell>
+      <HexCell size="sm" state="active">
+        <div style={masonryCellStyle}><div>OK</div></div>
+      </HexCell>
+      <HexCell size="sm">
+        <div style={masonryCellStyle}><div>--</div></div>
+      </HexCell>
+    </HexDashboard>
+  ),
+};
+
+/** Masonry responsive — resize the browser to see cells reflow into available space. */
+export const MasonryResponsive: Story = {
+  decorators: [(Story) => <div style={fullscreen}><Story /></div>],
+  render: (args) => (
+    <HexDashboard {...args} layout="masonry" atmosphere cellSize={52} gap={5}>
+      <HexCell size="xl" state="active">
+        <div style={masonryCellStyle}>
+          <div style={{ fontSize: '1.2rem' }}>COMMAND</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>司令部 • RESIZE TO REFLOW</div>
+        </div>
+      </HexCell>
+      <HexCell size="lg" state="active">
+        <div style={masonryCellStyle}>
+          <div>MELCHIOR</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>メルキオール</div>
+        </div>
+      </HexCell>
+      <HexCell size="lg" state="active">
+        <div style={masonryCellStyle}>
+          <div>BALTHASAR</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>バルタザール</div>
+        </div>
+      </HexCell>
+      <HexCell size="lg" state="warning">
+        <div style={masonryCellStyle}>
+          <div>CASPAR</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>カスパー</div>
+        </div>
+      </HexCell>
+      <HexCell size="md" state="active">
+        <div style={masonryCellStyle}><div>STATUS A</div></div>
+      </HexCell>
+      <HexCell size="md" state="active">
+        <div style={masonryCellStyle}><div>STATUS B</div></div>
+      </HexCell>
+      <HexCell size="md" state="active">
+        <div style={masonryCellStyle}><div>STATUS C</div></div>
+      </HexCell>
+      <HexCell size="sm" state="active">
+        <div style={masonryCellStyle}><div>01</div></div>
+      </HexCell>
+      <HexCell size="sm" state="active">
+        <div style={masonryCellStyle}><div>02</div></div>
+      </HexCell>
+      <HexCell size="sm" state="active">
+        <div style={masonryCellStyle}><div>03</div></div>
+      </HexCell>
+      <HexCell size="sm" state="active">
+        <div style={masonryCellStyle}><div>04</div></div>
+      </HexCell>
+      <HexCell size="sm">
+        <div style={masonryCellStyle}><div>05</div></div>
+      </HexCell>
+    </HexDashboard>
+  ),
+};
+
+/** Masonry with priority ordering — lower priority cells are placed first regardless of DOM order. */
+export const MasonryPriority: Story = {
+  decorators: [(Story) => <div style={{ width: 960, height: 600, border: '1px solid var(--eva-border)' }}><Story /></div>],
+  render: (args) => (
+    <HexDashboard {...args} layout="masonry" atmosphere>
+      {/* DOM order: sm first, but priority puts lg/xl first */}
+      <HexCell size="sm" state="active" priority={3}>
+        <div style={masonryCellStyle}>
+          <div>p=3</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>LOW PRI</div>
+        </div>
+      </HexCell>
+      <HexCell size="sm" state="active" priority={3}>
+        <div style={masonryCellStyle}>
+          <div>p=3</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>LOW PRI</div>
+        </div>
+      </HexCell>
+      <HexCell size="xl" state="active" priority={0}>
+        <div style={masonryCellStyle}>
+          <div style={{ fontSize: '1rem' }}>PRIORITY 0</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>最優先 • PLACED FIRST</div>
+        </div>
+      </HexCell>
+      <HexCell size="lg" state="warning" priority={1}>
+        <div style={masonryCellStyle}>
+          <div>PRIORITY 1</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>高優先</div>
+        </div>
+      </HexCell>
+      <HexCell size="lg" state="active" priority={1}>
+        <div style={masonryCellStyle}>
+          <div>PRIORITY 1</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>高優先</div>
+        </div>
+      </HexCell>
+      <HexCell size="md" state="active" priority={2}>
+        <div style={masonryCellStyle}>
+          <div>p=2</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>MID PRI</div>
+        </div>
+      </HexCell>
+      <HexCell size="md" state="active" priority={2}>
+        <div style={masonryCellStyle}>
+          <div>p=2</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>MID PRI</div>
+        </div>
+      </HexCell>
+      <HexCell size="sm" state="active" priority={3}>
+        <div style={masonryCellStyle}>
+          <div>p=3</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>LOW PRI</div>
+        </div>
+      </HexCell>
+    </HexDashboard>
+  ),
+};
+
+/** Masonry with zones — sidebar + header chrome combined with auto-placed masonry content. */
+export const MasonryWithZones: Story = {
+  decorators: [(Story) => <div style={fullscreen}><Story /></div>],
+  render: (args) => (
+    <HexDashboard
+      {...args}
+      layout="masonry"
+      atmosphere
+      cellSize={48}
+      gap={4}
+      minGapSize={64}
+      gapDistribution="left"
+      gapDistributionVertical="top"
+      zones={{
+        top: (
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <HudHeader scanlines>
+              <HudHeader.Title subtitle="自動配置モード">MASONRY LAYOUT</HudHeader.Title>
+              <HudHeader.Status>
+                <LiveClock />
+              </HudHeader.Status>
+            </HudHeader>
+            <HazardStripes height={3} animated speed={15} />
+          </div>
+        ),
+        left: (
+          <div style={{ display: 'flex', height: '100%' }}>
+            <div style={{ flex: 1 }}>
+              <HudSidebar hazardAccent scanlines>
+                <HudSidebar.Logo>NERV</HudSidebar.Logo>
+                <HudSidebar.Section label="LAYOUT">
+                  <HudSidebar.Nav>
+                    <HudSidebar.NavItem label="MASONRY" active />
+                    <HudSidebar.NavItem label="MANUAL" />
+                  </HudSidebar.Nav>
+                </HudSidebar.Section>
+                <HudSidebar.Footer>
+                  <span style={{ fontFamily: 'var(--eva-font-mono)', fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>MASONRY v1.0</span>
+                </HudSidebar.Footer>
+              </HudSidebar>
+            </div>
+            <HazardStripes angle={90} height="100%" stripeWidth={2} animated speed={10} />
+          </div>
+        ),
+      }}
+    >
+      <HexCell size="xl" state="active" priority={0}>
+        <div style={masonryCellStyle}>
+          <div style={{ fontSize: '1rem' }}>MAIN DISPLAY</div>
+          <div style={{ fontSize: '0.5rem', color: 'var(--eva-text-dim)' }}>メインディスプレイ</div>
+        </div>
+      </HexCell>
+      <HexCell size="lg" state="active" priority={1}>
+        <MetricCell metric={metrics[0] as MetricData} />
+      </HexCell>
+      <HexCell size="lg" state="active" priority={1}>
+        <MetricCell metric={metrics[1] as MetricData} />
+      </HexCell>
+      <HexCell size="lg" state="warning" priority={1}>
+        <MetricCell metric={metrics[2] as MetricData} />
+      </HexCell>
+      <HexCell size="md" state="active" priority={2}>
+        <div style={masonryCellStyle}><div>NODE A</div></div>
+      </HexCell>
+      <HexCell size="md" state="active" priority={2}>
+        <div style={masonryCellStyle}><div>NODE B</div></div>
+      </HexCell>
+      <HexCell size="sm" state="active" priority={3}>
+        <div style={masonryCellStyle}><div>OK</div></div>
+      </HexCell>
+      <HexCell size="sm" state="active" priority={3}>
+        <div style={masonryCellStyle}><div>OK</div></div>
+      </HexCell>
+      <HexCell size="sm" state="warning" priority={3}>
+        <div style={masonryCellStyle}><div>!</div></div>
+      </HexCell>
+    </HexDashboard>
+  ),
+};
