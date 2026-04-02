@@ -1,0 +1,331 @@
+@layer eva-ui {
+  /* ── Data Table ── */
+  .eva-demo-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--eva-font-mono);
+    font-size: var(--eva-text-xs);
+    color: var(--eva-text);
+  }
+
+  .eva-demo-table thead th {
+    color: var(--eva-gold);
+    text-align: left;
+    padding: 0.35rem 0.5rem;
+    border-bottom: 1px solid var(--eva-gold);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .eva-demo-table tbody td {
+    padding: 0.3rem 0.5rem;
+    border-bottom: 1px solid var(--eva-border);
+    white-space: nowrap;
+  }
+
+  .eva-demo-table tbody tr:nth-child(even) {
+    background: var(--eva-deep);
+  }
+
+  .eva-demo-table tbody tr:hover {
+    background: var(--eva-hex-hover);
+  }
+
+  .eva-demo-table .status-ok {
+    color: #22cc44;
+  }
+
+  .eva-demo-table .status-warn {
+    color: var(--eva-gold);
+  }
+
+  .eva-demo-table .status-fail {
+    color: var(--eva-crimson);
+  }
+
+  /* ── Scrollable Log ── */
+  .eva-demo-log {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    font-family: var(--eva-font-mono);
+    font-size: var(--eva-text-xs);
+    color: var(--eva-text);
+  }
+
+  .eva-demo-log__header {
+    color: var(--eva-gold);
+    font-size: var(--eva-text-sm);
+    font-weight: 600;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--eva-border);
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+
+  .eva-demo-log__scroll {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+  }
+
+  .eva-demo-log__line {
+    padding: 0.15rem 0;
+    line-height: 1.4;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .eva-demo-log__timestamp {
+    color: var(--eva-text-dim);
+    flex-shrink: 0;
+  }
+
+  .eva-demo-log__level--info {
+    color: var(--eva-gold);
+  }
+
+  .eva-demo-log__level--ok {
+    color: #22cc44;
+  }
+
+  .eva-demo-log__level--warn {
+    color: var(--eva-stripe);
+  }
+
+  .eva-demo-log__level--err {
+    color: var(--eva-crimson);
+  }
+
+  .eva-demo-log__msg {
+    color: var(--eva-text);
+  }
+
+  /* ── CSS Bar Chart ── */
+  .eva-demo-chart {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    font-family: var(--eva-font-mono);
+    font-size: var(--eva-text-xs);
+  }
+
+  .eva-demo-chart__title {
+    color: var(--eva-gold);
+    font-size: var(--eva-text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.35rem;
+    flex-shrink: 0;
+  }
+
+  .eva-demo-chart__bars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.5rem;
+    flex: 1;
+    min-height: 0;
+    padding-bottom: 1.2rem;
+    position: relative;
+  }
+
+  .eva-demo-chart__col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    flex: 1;
+    max-width: 2rem;
+  }
+
+  .eva-demo-chart__bar {
+    width: 100%;
+    min-height: 4px;
+    border-radius: 2px 2px 0 0;
+    transition: height 0.3s ease;
+  }
+
+  .eva-demo-chart__label {
+    color: var(--eva-text-dim);
+    font-size: 0.5rem;
+    text-align: center;
+  }
+
+  .eva-demo-chart__value {
+    color: var(--eva-text);
+    font-size: 0.5rem;
+    text-align: center;
+  }
+
+  /* ── Detail Card ── */
+  .eva-demo-card {
+    font-family: var(--eva-font-mono);
+    font-size: var(--eva-text-xs);
+    color: var(--eva-text);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .eva-demo-card__title {
+    color: var(--eva-gold);
+    font-size: var(--eva-text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .eva-demo-card__subtitle {
+    color: var(--eva-text-dim);
+    font-size: var(--eva-text-xs);
+    margin-bottom: 0.25rem;
+  }
+
+  .eva-demo-card__row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.2rem 0;
+    border-bottom: 1px solid var(--eva-border);
+  }
+
+  .eva-demo-card__key {
+    color: var(--eva-text-dim);
+    text-transform: uppercase;
+  }
+
+  .eva-demo-card__val {
+    color: var(--eva-text);
+    text-align: right;
+  }
+
+  /* ── Status Card (progress bar variant) ── */
+  .eva-demo-status {
+    font-family: var(--eva-font-mono);
+    font-size: var(--eva-text-xs);
+    color: var(--eva-text);
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .eva-demo-status__title {
+    color: var(--eva-gold);
+    font-size: var(--eva-text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .eva-demo-status__subtitle {
+    color: var(--eva-text-dim);
+    font-size: var(--eva-text-xs);
+  }
+
+  .eva-demo-status__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .eva-demo-status__label {
+    color: var(--eva-text-dim);
+    flex-shrink: 0;
+  }
+
+  .eva-demo-status__bar-track {
+    flex: 1;
+    height: 4px;
+    background: var(--eva-border);
+    border-radius: 2px;
+  }
+
+  .eva-demo-status__bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  .eva-demo-status__bar-fill--good {
+    background: #22cc44;
+  }
+
+  .eva-demo-status__bar-fill--warn {
+    background: var(--eva-gold);
+  }
+
+  .eva-demo-status__bar-fill--bad {
+    background: var(--eva-crimson);
+  }
+
+  .eva-demo-status__pct {
+    min-width: 2.5rem;
+    text-align: right;
+  }
+
+  /* ── Metric (simple, for md/sm cells) ── */
+  .eva-demo-metric {
+    font-family: var(--eva-font-mono);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  .eva-demo-metric__value {
+    font-size: var(--eva-text-lg);
+    color: var(--eva-text);
+  }
+
+  .eva-demo-metric__label {
+    font-size: 0.5rem;
+    color: var(--eva-text-dim);
+    text-transform: uppercase;
+  }
+
+  /* ── Status Indicator (sm cells) ── */
+  .eva-demo-indicator {
+    font-family: var(--eva-font-mono);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 0.15rem;
+  }
+
+  .eva-demo-indicator__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .eva-demo-indicator__dot--ok {
+    background: #22cc44;
+    box-shadow: 0 0 4px #22cc44;
+  }
+
+  .eva-demo-indicator__dot--warn {
+    background: var(--eva-gold);
+    box-shadow: 0 0 4px var(--eva-gold);
+  }
+
+  .eva-demo-indicator__dot--err {
+    background: var(--eva-crimson);
+    box-shadow: 0 0 4px var(--eva-crimson);
+  }
+
+  .eva-demo-indicator__text {
+    font-size: 0.45rem;
+    color: var(--eva-text-dim);
+    text-transform: uppercase;
+  }
+}

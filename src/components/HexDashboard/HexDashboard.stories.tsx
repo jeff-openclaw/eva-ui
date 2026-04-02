@@ -13,6 +13,7 @@ import './MetricDemo.css';
 import './MagiVotingDemo.css';
 import './ActivityFeedDemo.css';
 import './FullDemo.css';
+import './RichContentDemo.css';
 
 const fullscreen: React.CSSProperties = {
   width: '100vw',
@@ -1245,6 +1246,294 @@ export const MasonryWithZones: Story = {
       <HexCell size="sm" state="warning" priority={3}>
         <div style={masonryCellStyle}><div>!</div></div>
       </HexCell>
+    </HexDashboard>
+  ),
+};
+
+/* ── Rich Content Demos ── */
+
+const pilotRoster = [
+  { id: 'EVA-00', pilot: 'Ayanami Rei', status: 'STANDBY', sync: '68.4%', statusClass: 'status-warn' },
+  { id: 'EVA-01', pilot: 'Ikari Shinji', status: 'ACTIVE', sync: '94.2%', statusClass: 'status-ok' },
+  { id: 'EVA-02', pilot: 'Soryu Asuka', status: 'ACTIVE', sync: '87.1%', statusClass: 'status-ok' },
+  { id: 'EVA-03', pilot: 'Suzuhara Toji', status: 'OFFLINE', sync: '—', statusClass: 'status-fail' },
+  { id: 'EVA-04', pilot: '— UNMANNED', status: 'DESTROYED', sync: '—', statusClass: 'status-fail' },
+  { id: 'EVA-05', pilot: 'Makinami Mari', status: 'STANDBY', sync: '71.9%', statusClass: 'status-warn' },
+];
+
+const statusCards = [
+  {
+    title: 'LCL PLANT',
+    subtitle: 'LCLプラント',
+    rows: [
+      { label: 'PURITY', pct: 99.7, rating: 'good' as const },
+      { label: 'PRESSURE', pct: 82.3, rating: 'warn' as const },
+      { label: 'TEMP', pct: 94.1, rating: 'good' as const },
+      { label: 'FLOW', pct: 67.0, rating: 'warn' as const },
+    ],
+  },
+  {
+    title: 'POWER GRID',
+    subtitle: '電力網',
+    rows: [
+      { label: 'MAIN', pct: 100, rating: 'good' as const },
+      { label: 'BACKUP', pct: 88.5, rating: 'good' as const },
+      { label: 'S² ENGINE', pct: 42.0, rating: 'bad' as const },
+      { label: 'RESERVE', pct: 55.2, rating: 'warn' as const },
+    ],
+  },
+];
+
+const tableMetrics = [
+  { value: '142', label: 'TESTS', unit: '' },
+  { value: '99.3%', label: 'UPTIME', unit: '' },
+  { value: '2.4GB', label: 'THROUGHPUT', unit: '/s' },
+  { value: '4ms', label: 'LATENCY', unit: '' },
+];
+
+function StatusCard({ data }: { data: typeof statusCards[number] }): React.JSX.Element {
+  return (
+    <div className="eva-demo-status">
+      <div className="eva-demo-status__title">{data.title}</div>
+      <div className="eva-demo-status__subtitle">{data.subtitle}</div>
+      {data.rows.map((row) => (
+        <div className="eva-demo-status__row" key={row.label}>
+          <span className="eva-demo-status__label">{row.label}</span>
+          <div className="eva-demo-status__bar-track">
+            <div
+              className={`eva-demo-status__bar-fill eva-demo-status__bar-fill--${row.rating}`}
+              style={{ width: `${row.pct}%` }}
+            />
+          </div>
+          <span className="eva-demo-status__pct">{row.pct.toFixed(1)}%</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** Demo: Rich content in hex cells — data table, status cards, and simple metrics in a masonry grid. */
+export const RichContentTable: Story = {
+  decorators: [(Story) => <div style={{ width: 1100, height: 700, border: '1px solid var(--eva-border)' }}><Story /></div>],
+  render: (args) => (
+    <HexDashboard {...args} layout="masonry" atmosphere>
+      {/* XL: Pilot roster table */}
+      <HexCell size="xl" state="active" clipped={false} priority={0}>
+        <div style={{ padding: '0.5rem' }}>
+          <table className="eva-demo-table">
+            <thead>
+              <tr>
+                <th>UNIT</th>
+                <th>PILOT</th>
+                <th>STATUS</th>
+                <th>SYNC</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pilotRoster.map((p) => (
+                <tr key={p.id}>
+                  <td>{p.id}</td>
+                  <td>{p.pilot}</td>
+                  <td className={p.statusClass}>{p.status}</td>
+                  <td>{p.sync}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </HexCell>
+
+      {/* LG: Status cards */}
+      {statusCards.map((card) => (
+        <HexCell key={card.title} size="lg" state="active" clipped={false} priority={1}>
+          <div style={{ padding: '0.4rem' }}>
+            <StatusCard data={card} />
+          </div>
+        </HexCell>
+      ))}
+
+      {/* MD: Simple metrics */}
+      {tableMetrics.map((m) => (
+        <HexCell key={m.label} size="md" state="active" priority={2}>
+          <div className="eva-demo-metric">
+            <div className="eva-demo-metric__value">{m.value}{m.unit}</div>
+            <div className="eva-demo-metric__label">{m.label}</div>
+          </div>
+        </HexCell>
+      ))}
+    </HexDashboard>
+  ),
+};
+
+/* ── Rich Content Mixed ── */
+
+const terminalLog = [
+  { time: '14:32:07', level: 'ok' as const, msg: 'System bootstrap complete — all subsystems nominal' },
+  { time: '14:32:05', level: 'info' as const, msg: 'MAGI link established — sync rate 92.1%' },
+  { time: '14:32:03', level: 'warn' as const, msg: 'AT Field fluctuation detected — sector 7G' },
+  { time: '14:32:01', level: 'ok' as const, msg: 'Entry plug neural handshake confirmed' },
+  { time: '14:31:58', level: 'err' as const, msg: 'Umbilical cable #3 signal degraded — rerouting' },
+  { time: '14:31:55', level: 'info' as const, msg: 'LCL ionization at 97.3% — within tolerance' },
+  { time: '14:31:52', level: 'ok' as const, msg: 'Progressive knife charge cycle — 100%' },
+  { time: '14:31:49', level: 'warn' as const, msg: 'Pattern BLUE threshold approaching — monitoring' },
+  { time: '14:31:46', level: 'ok' as const, msg: 'Cage restraint bolts — all locks confirmed' },
+  { time: '14:31:43', level: 'info' as const, msg: 'GeoFront perimeter scan — no anomalies' },
+  { time: '14:31:40', level: 'err' as const, msg: 'Pilot biometric spike — heart rate 142 BPM' },
+  { time: '14:31:37', level: 'ok' as const, msg: 'Coolant circulation nominal — 4.2°C delta' },
+  { time: '14:31:34', level: 'info' as const, msg: 'Weapon rack reload — positron rifle charged' },
+  { time: '14:31:31', level: 'ok' as const, msg: 'Terminal Dogma access sealed — clearance NERV-1' },
+  { time: '14:31:28', level: 'warn' as const, msg: 'External power reserve at 55% — conservation mode' },
+];
+
+const systemTable = [
+  { system: 'MELCHIOR', type: 'MAGI-01', load: '78%', temp: '42°C', status: 'NOMINAL', statusClass: 'status-ok' },
+  { system: 'BALTHASAR', type: 'MAGI-02', load: '84%', temp: '44°C', status: 'NOMINAL', statusClass: 'status-ok' },
+  { system: 'CASPAR', type: 'MAGI-03', load: '91%', temp: '51°C', status: 'WARNING', statusClass: 'status-warn' },
+  { system: 'PRIBNOW', type: 'BIO-LAB', load: '32%', temp: '21°C', status: 'STANDBY', statusClass: 'status-warn' },
+  { system: 'SIGMA', type: 'COMMS', load: '67%', temp: '38°C', status: 'ACTIVE', statusClass: 'status-ok' },
+];
+
+const chartData = [
+  { label: 'MON', value: 72, color: 'var(--eva-crimson)' },
+  { label: 'TUE', value: 88, color: 'var(--eva-gold)' },
+  { label: 'WED', value: 64, color: 'var(--eva-crimson)' },
+  { label: 'THU', value: 95, color: '#22cc44' },
+  { label: 'FRI', value: 81, color: 'var(--eva-gold)' },
+];
+
+const detailCard = {
+  title: 'EVA UNIT-01',
+  subtitle: '初号機 — TEST TYPE',
+  rows: [
+    { key: 'PILOT', val: 'Ikari Shinji' },
+    { key: 'SYNC RATE', val: '94.2%' },
+    { key: 'STATUS', val: 'COMBAT READY' },
+    { key: 'ARMOR', val: 'TYPE-D — INTACT' },
+    { key: 'POWER', val: 'UMBILICAL + S²' },
+    { key: 'LAST SORTIE', val: '2015-06-22' },
+  ],
+};
+
+const mixedMetrics = [
+  { value: '3', label: 'ACTIVE EVA' },
+  { value: '78%', label: 'AVG SYNC' },
+  { value: '0', label: 'ANGEL DET' },
+];
+
+const statusIndicators = [
+  { label: 'MAGI', status: 'ok' as const },
+  { label: 'NERV', status: 'ok' as const },
+  { label: 'AT-F', status: 'warn' as const },
+  { label: 'SEELE', status: 'err' as const },
+];
+
+/** Demo: Mixed rich content — terminal log, data table, bar chart, detail card, metrics, and status indicators. */
+export const RichContentMixed: Story = {
+  decorators: [(Story) => <div style={{ width: 1200, height: 800, border: '1px solid var(--eva-border)' }}><Story /></div>],
+  render: (args) => (
+    <HexDashboard {...args} layout="masonry" atmosphere>
+      {/* XL: Terminal log */}
+      <HexCell size="xl" state="active" clipped={false} priority={0}>
+        <div className="eva-demo-log" style={{ padding: '0.5rem' }}>
+          <div className="eva-demo-log__header">SYSTEM LOG — システムログ</div>
+          <div className="eva-demo-log__scroll">
+            {terminalLog.map((entry, i) => (
+              <div className="eva-demo-log__line" key={i}>
+                <span className="eva-demo-log__timestamp">{entry.time}</span>
+                <span className={`eva-demo-log__level--${entry.level}`}>
+                  [{entry.level.toUpperCase()}]
+                </span>
+                <span className="eva-demo-log__msg">{entry.msg}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </HexCell>
+
+      {/* XL: System data table */}
+      <HexCell size="xl" state="active" clipped={false} priority={0}>
+        <div style={{ padding: '0.5rem' }}>
+          <table className="eva-demo-table">
+            <thead>
+              <tr>
+                <th>SYSTEM</th>
+                <th>TYPE</th>
+                <th>LOAD</th>
+                <th>TEMP</th>
+                <th>STATUS</th>
+              </tr>
+            </thead>
+            <tbody>
+              {systemTable.map((row) => (
+                <tr key={row.system}>
+                  <td>{row.system}</td>
+                  <td>{row.type}</td>
+                  <td>{row.load}</td>
+                  <td>{row.temp}</td>
+                  <td className={row.statusClass}>{row.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </HexCell>
+
+      {/* LG: CSS bar chart */}
+      <HexCell size="lg" state="active" clipped={false} priority={1}>
+        <div className="eva-demo-chart" style={{ padding: '0.4rem' }}>
+          <div className="eva-demo-chart__title">SYNC HISTORY — 同期履歴</div>
+          <div className="eva-demo-chart__bars">
+            {chartData.map((bar) => (
+              <div className="eva-demo-chart__col" key={bar.label}>
+                <div className="eva-demo-chart__value">{bar.value}%</div>
+                <div
+                  className="eva-demo-chart__bar"
+                  style={{
+                    height: `${bar.value}%`,
+                    background: bar.color,
+                    boxShadow: `0 0 6px ${bar.color}`,
+                  }}
+                />
+                <div className="eva-demo-chart__label">{bar.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </HexCell>
+
+      {/* LG: Detail card */}
+      <HexCell size="lg" state="active" clipped={false} priority={1}>
+        <div className="eva-demo-card" style={{ padding: '0.4rem' }}>
+          <div className="eva-demo-card__title">{detailCard.title}</div>
+          <div className="eva-demo-card__subtitle">{detailCard.subtitle}</div>
+          {detailCard.rows.map((row) => (
+            <div className="eva-demo-card__row" key={row.key}>
+              <span className="eva-demo-card__key">{row.key}</span>
+              <span className="eva-demo-card__val">{row.val}</span>
+            </div>
+          ))}
+        </div>
+      </HexCell>
+
+      {/* MD: Metrics */}
+      {mixedMetrics.map((m) => (
+        <HexCell key={m.label} size="md" state="active" priority={2}>
+          <div className="eva-demo-metric">
+            <div className="eva-demo-metric__value">{m.value}</div>
+            <div className="eva-demo-metric__label">{m.label}</div>
+          </div>
+        </HexCell>
+      ))}
+
+      {/* SM: Status indicators */}
+      {statusIndicators.map((ind) => (
+        <HexCell key={ind.label} size="sm" state={ind.status === 'err' ? 'warning' : 'active'} priority={3}>
+          <div className="eva-demo-indicator">
+            <div className={`eva-demo-indicator__dot eva-demo-indicator__dot--${ind.status}`} />
+            <div className="eva-demo-indicator__text">{ind.label}</div>
+          </div>
+        </HexCell>
+      ))}
     </HexDashboard>
   ),
 };
