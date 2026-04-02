@@ -73,3 +73,6 @@ export {
 export type {
   Hex, FractionalHex, Point, HexLayout, Orientation,
 } from './utils/hexTypes';
+
+export { hexGroupPositions } from './utils/hexGroups';
+export type { HexGroupPattern, CellRole, GroupCell } from './utils/hexGroups';
